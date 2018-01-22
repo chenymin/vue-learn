@@ -1,0 +1,63 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*:before, *:after {
+  box-sizing: border-box;
+}
+
+body, html, ol, ul, button, p{
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: $bg-color;
+  font-family: Helvetica, Tahoma, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Heiti SC";
+  overflow-x: hidden;
+}
+
+ul, li {
+  list-style:none;
+}
+
+button {
+  background-color: transparent;
+}
+
+button, input, select,textarea{
+  border: none;
+  outline: none;
+}
+
+input[type="submit"],input[type="reset"],input[type="button"] {
+  -webkit-appearance: none;
+}
+
+.top {
+  margin-top: 0.5rem!important;
+}
+
+::-moz-placeholder {
+  color: #ccc;
+}
+::-webkit-input-placeholder {
+  color:#ccc;
+}
+:-ms-input-placeholder {
+  color:#ccc;
+}
+
+.arrow-right {
+  content: '';
+  position: absolute;
+  right: 5px;
+  width: 12px;
+  height: 12px;
+  border-bottom: solid 2px #ccc;
+  border-right: solid 2px #ccc;
+  transform: rotate(-45deg);
+  top: 50%;
+  margin-top: -6px;
+}

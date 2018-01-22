@@ -1,0 +1,28 @@
+$button-border-radius: 4px;
+$button-padding: 0.21rem;
+$button-border-color: #e0e0e0;
+$button-bg: #cda76e;
+
+.primary-button {
+  padding: $button-padding;
+  text-align: center;
+  border-radius: $button-border-radius;
+  background-color: $button-bg;
+  color: #fff;
+  margin: 0 $primary-padding-bottom;
+  font-size: $primary-font-size;
+}
+
+.btn-bg-white {
+  background-color: #fff;
+  color: #666;
+  border: 1px solid #d5d5d5;
+}
+
+.btn-disabled {
+  background-color: #d5d5d5;
+}
+
+.btn-top {
+  margin-top: 0.3rem
+}
