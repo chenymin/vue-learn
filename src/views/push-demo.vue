@@ -34,8 +34,10 @@
 <script>
   import PulltoloadData from '../components/pulltoloaddata.vue'
   export default {
-    data: {
-      pullData: {
+    data () {
+      return {
+        pullData: {
+        }
       }
     },
     components: {
@@ -46,6 +48,8 @@
 
 <style lang="scss" scoped>
   .pull-wrap {
+    background-color: #fff;
+    height: 95vh;
     .pull-wrap-header {
       position: fixed;
       width: 100%;

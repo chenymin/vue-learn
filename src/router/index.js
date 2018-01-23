@@ -9,7 +9,7 @@ const PushDemo = r => require.ensure([], () => r(require('@/views/push-demo')), 
 
 const router = new Router({
   routes: [
-    { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '登录' } }
+    { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '下拉刷新' } }
   ]
 })
 
