@@ -15,7 +15,9 @@
         pullNode: '',
         startTime: 0,
         endTime: 0,
-        startScrollTop: '',
+        scrollTop: '',
+        offsetHeight: '',
+        scrollHeight: '',
         isTouchStart: false,
         dragDirection: '',
         target: {
@@ -56,15 +58,15 @@
         }
       },
       onTouchStart (event) {
-        console.log('onTouchStart-----')
         this.startTime = new Date().getTime()
         this.target.startY = this.getPoint(event).y
         this.target.lastY = this.target.startY
         this.isTouchStart = true
 
         this.dragDirection = ''
-        this.startScrollTop = this.pullNode.scrollTop
-        console.log(this.target.startY)
+        this.scrollTop = this.pullNode.scrollTop
+        this.offsetHeight = this.pullNode.offsetHeight
+        this.scrollHeight = this.pullNode.scrollHeight
       },
       onTouchMove (event) {
         if (!this.isTouchStart) {
@@ -73,14 +75,12 @@
         this.target.lastY = this.getPoint(event).y
         this.target.moveDistanceY = this.target.lastY - this.target.startY
         this.dragDirection = this.target.moveDistanceY > 0 ? 'down' : 'up'
-        if (this.dragDirection === 'down') {
-          requestAnimationFrame(this.updateUi)
-        }
-        if (this.startScrollTop === 0 && this.direction === 'down') {
+        requestAnimationFrame(this.updateUi)
+        if (this.scrollTop === 0 && this.dragDirection === 'down') {
           event.preventDefault()
-          event.stopPropagation()
+        } else if ((this.scrollTop + this.offsetHeight >= this.scrollHeight) && this.dragDirection === 'up') {
+          event.preventDefault()
         }
-        console.log('----onTouchMove----' + this.dragDirection)
       },
       onTouchEnd (event) {
         if (!this.isTouchStart) {
@@ -133,7 +133,7 @@
       flex: 1;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      transition: all 130ms ease-in;
+      // transition: all 130ms ease-in;
     }
   }
 </style>

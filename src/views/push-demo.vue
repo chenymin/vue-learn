@@ -48,21 +48,22 @@
 
 <style lang="scss" scoped>
   .pull-wrap {
-    background-color: #fff;
+    background-color: #333;
     height: 95vh;
     .pull-wrap-header {
       position: fixed;
       width: 100%;
-      height: 0.5rem;
+      height: 1rem;
       background-color: #ddd;
       font-size: 0.3rem;
       display: flex;
       justify-content: center;
       align-items: center;
+      z-index: 1;
     }
     .pull-wrap-header-space {
       width: 100%;
-      height: 0.5rem;
+      height: 1rem;
     }
     .list {
       .item {
