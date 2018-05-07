@@ -68,7 +68,6 @@
     .list {
       .item {
         height: 1rem;
-        background-color: #fff;
         font-size: 0.3rem;
       }
     }
