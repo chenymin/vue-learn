@@ -5,11 +5,13 @@ import {getStore} from '../utils/storage'
 import {setTitle} from '../utils/util'
 
 Vue.use(Router)
-const PushDemo = r => require.ensure([], () => r(require('@/views/push-demo')), 'chunk-login')
+const PushDemo = r => require.ensure([], () => r(require('@/views/push-demo')), 'chunk-pushdemo')
+const demo = r => require.ensure([], () => r(require('@/views/demo')), 'chunk-demo')
 
 const router = new Router({
   routes: [
-    { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '下拉刷新' } }
+    { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '下拉刷新' } },
+    { name: 'demo', path: '/demo', component: demo, meta: { auth: false, title: 'demo' } }
   ]
 })
 
