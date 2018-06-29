@@ -4,12 +4,14 @@
     </confirm-dialogue>
     <button @click="myMethods">显示确认组件</button>
     <select-search :list="list"></select-search>
+    <dots-loader></dots-loader>
   </div>
 </template>
 
 <script>
   import ConfirmDialogue from '../components/confirmdialogue.vue'
   import SelectSearch from '../components/select-search.vue'
+  import DotsLoader from '../components/loading/dots-loader.vue'
   export default {
     data () {
       return {
@@ -48,7 +50,8 @@
     },
     components: {
       ConfirmDialogue,
-      SelectSearch
+      SelectSearch,
+      DotsLoader
     },
     mounted () {
       this.eventBus.$on('confirm/ok', this.test)

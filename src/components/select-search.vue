@@ -27,11 +27,9 @@ export default {
   methods: {
     changeValue (event) {
       const val = event.target.value
-      const newArr = []
-      this.items.filter(({label, value}) => {
-        if (label.indexOf(val) >= 0) {
-          newArr.unshift({label, value})
-        }
+      let newArr = []
+      newArr = this.items.filter(({label, value}) => {
+        return label.indexOf(val) >= 0
       })
       this.items = [...newArr]
       if (this.items.length === 0 || val === '') {
@@ -39,7 +37,6 @@ export default {
       }
     },
     watchList () {
-      console.log('----->')
       this.items = [...this.list]
     }
   },

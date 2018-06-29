@@ -7,11 +7,15 @@ import {setTitle} from '../utils/util'
 Vue.use(Router)
 const PushDemo = r => require.ensure([], () => r(require('@/views/push-demo')), 'chunk-pushdemo')
 const demo = r => require.ensure([], () => r(require('@/views/demo')), 'chunk-demo')
+const SliderCard = r => require.ensure([], () => r(require('@/views/slider-card')), 'chunk-sliderCard')
+const ScrollList = r => require.ensure([], () => r(require('@/views/scroll-list')), 'chunk-scrollList')
 
 const router = new Router({
   routes: [
     { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '下拉刷新' } },
-    { name: 'demo', path: '/demo', component: demo, meta: { auth: false, title: 'demo' } }
+    { name: 'demo', path: '/demo', component: demo, meta: { auth: false, title: 'demo' } },
+    { name: 'slidercard', path: '/slidercard', component: SliderCard, meta: { auth: false, title: 'slidercard' } },
+    { name: 'scrolllist', path: '/scrolllist', component: ScrollList, meta: { auth: false, title: 'scrolllist' } }
   ]
 })
 
