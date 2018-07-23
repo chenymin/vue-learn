@@ -32,7 +32,7 @@
   import Exif from 'exif-js'
   import {getStore} from '../utils/storage'
   import {uploadPic, deletePic} from '../api/carLoanApply'
-  import TransitionExpand from './transitionExpand'
+  import TransitionExpand from './transition/transitionExpand'
 
   export default {
     data () {

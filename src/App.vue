@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <transition-page>
+      <router-view></router-view>
+    </transition-page>
     <my-toast
            :title="toast.title"
            :content="toast.content">
@@ -13,6 +15,8 @@
 import {mapGetters} from 'vuex'
 import MyToast from './components/toast'
 import Loding from './components/loading/loding'
+import TransitionPage from './components/transition/transitionpage'
+
 export default {
   name: 'app',
   computed: {
@@ -22,7 +26,8 @@ export default {
   },
   components: {
     MyToast,
-    Loding
+    Loding,
+    TransitionPage
   },
   created () {
     this.$store.commit('getChannelInfo')

@@ -1,35 +1,39 @@
 <template>
-  <div class="selection-container">
-    <div class="cover-container" @touchmove.prevent @click.stop="hiddenSelect" v-if="isShow">
-    </div>
-    <div class="form-filed" @click="showSelect">
-      <label class="label">{{props.title}}</label>
-      <span class="select-com" :class="{'select-no-arrow': props.isNoArrow}">{{getDetaultVal()}}</span>
-    </div>
-    <transition name="list-fade">
-      <div id="mySelect" class="select-wrap" v-if="isShow">
-        <p class="title">
-          <span class="remove" @click="hiddenSelect"></span>
-          请选择{{props.title}}
-        </p>
-        <p class="area" v-if="props.selectType === 'area'">
-          <span class="choice">请选择</span>
-          <span class="province">{{selectVal}}</span>
-        </p>
-        <ul class="list">
-          <li class="item" v-for="(item, index) in props.list" :key='index'
-                          :class="{'selected': (index === currentIndex) && props.selectType!=='area'}"
-                          @click="selectItem(item, index)">
-            {{getOptionLabel(item)}}
-          </li>
-        </ul>
+    <div class="selection-container">
+      <div class="form-filed" @click="showSelect">
+        <label class="label">{{props.title}}</label>
+        <span class="select-com" :class="{'select-no-arrow': props.isNoArrow}">{{getDetaultVal()}}</span>
       </div>
-    </transition>
-  </div>
+      <cover-container :is-show='isShow'  ref='coverCom' v-on:cover-hidden='noticeClose'>
+        <transition-expand slot='cover-slot'>
+          <div id="mySelect" class="select-wrap" v-if="isShow">
+            <p class="title">
+              <span class="remove" @click="hiddenSelect"></span>
+              请选择{{props.title}}
+            </p>
+            <p class="area" v-if="props.selectType === 'area'">
+              <span class="choice">请选择</span>
+              <span class="province">{{selectVal}}</span>
+            </p>
+            <ul class="list">
+              <li class="item" v-for="(item, index) in props.list" :key='index'
+                              :class="{'selected': (index === currentIndex) && props.selectType!=='area'}"
+                              @click="selectItem(item, index)">
+                {{getOptionLabel(item)}}
+              </li>
+            </ul>
+          </div>
+        </transition-expand>
+      </cover-container>
+    </div>
+  
 </template>
 
 <script>
   import smartScrolls from '../utils/smartScroll'
+  import TransitionExpand from './transition/transitionExpand'
+  import CoverContainer from './base/cover'
+
   export default {
     data () {
       return {
@@ -40,6 +44,9 @@
     },
     props: ['props', 'model'],
     methods: {
+      noticeClose () {
+        this.hiddenSelect()
+      },
       getDetaultVal () {
         const item = this.props.list[this.currentIndex]
         return this.currentIndex === -1 ? this.props.defaultVal : this.getOptionLabel(item)
@@ -139,6 +146,10 @@
         this.commitValue()
       }
     },
+    components: {
+      TransitionExpand,
+      CoverContainer
+    },
     mounted () {
       this.$watch('props.defaultVal', this.watchValue)
       this.$watch('props.validOff', this.watchValid)
@@ -168,6 +179,9 @@
       background-color: #fff;
       height: 1rem;
       padding: 0 0.3rem;
+      .label {
+        font-size: 0.32rem;
+      }
       .select-com {
         display: flex;
         flex: 1;

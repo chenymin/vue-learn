@@ -1,6 +1,6 @@
 <template>
-  <div class="cover-component" v-show="isShowCover">
-    <div class="cover-container" @click.prevent="coverHidden">
+  <div class="cover-component">
+    <div class="cover-container" @click.prevent="coverHidden" v-show="isShowCover">
     </div>
     <slot name='cover-slot'></slot>
   </div>
@@ -10,18 +10,28 @@
   export default {
     data () {
       return {
-        isShowCover: false
+        isShowCover: this.isShow
       }
     },
     props: {
       isTouchClose: {
         type: Boolean,
         default: false
+      },
+      isShow: {
+        type: Boolean,
+        default: false
+      }
+    },
+    watch: {
+      'isShow' (newVal, oldVal) {
+        this.isShowCover = this.isShow
       }
     },
     methods: {
       coverHidden () {
         if (this.isTouchClose) return
+        this.$emit('cover-hidden')
         this.hiddenCover()
       },
       hiddenCover () {
@@ -40,8 +50,9 @@
     position: relative;
   }
   .cover-container {
-    position: absolute;
+    position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
     background-color: #333;

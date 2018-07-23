@@ -11,15 +11,17 @@ const SliderCard = r => require.ensure([], () => r(require('@/views/slider-card'
 const TransitionExpand = r => require.ensure([], () => r(require('@/views/transitionexpand-demo')), 'chunk-transitionexpand')
 const ScrollList = r => require.ensure([], () => r(require('@/views/scroll-list')), 'chunk-scrollList')
 const NavButton = r => require.ensure([], () => r(require('@/views/nav-button')), 'chunk-navButton')
+const OverLay = r => require.ensure([], () => r(require('@/views/over-lay')), 'chunk-overlay')
 
 const router = new Router({
   routes: [
     { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '下拉刷新' } },
-    { name: 'demo', path: '/demo', component: demo, meta: { auth: false, title: 'demo' } },
+    { name: 'demo', path: '/demo', component: demo, meta: { auth: false, title: 'demo', transitionName: `slide` } },
     { name: 'slidercard', path: '/slidercard', component: SliderCard, meta: { auth: false, title: 'slidercard' } },
     { name: 'transitionexpand', path: '/transitionexpand', component: TransitionExpand, meta: { auth: false, title: 'transitionexpand' } },
     { name: 'scrolllist', path: '/scrolllist', component: ScrollList, meta: { auth: false, title: 'scrolllist' } },
-    { name: 'navbutton', path: '/navbutton', component: NavButton, meta: { auth: false, title: 'navButton' } }
+    { name: 'navbutton', path: '/navbutton', component: NavButton, meta: { auth: false, title: 'navButton', transitionName: `slide` } },
+    { name: 'overlay', path: '/overlay', component: OverLay, meta: { auth: false, title: 'overlay', transitionName: `zoom` } }
   ]
 })
 

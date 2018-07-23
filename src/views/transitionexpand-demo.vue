@@ -163,17 +163,18 @@
         })
       },
       commitInfo () {
-        if (this.isFormValid()) {
-          return
-        }
-        this.isDisable = true
-        this.setStore('jumpToComplete', 1)
-        this.$router.push({name: 'applycomplete'})
+        this.$router.push({name: 'overlay'})
+        // if (this.isFormValid()) {
+        //   return
+        // }
+        // this.isDisable = true
+        // this.setStore('jumpToComplete', 1)
+        // this.$router.push({name: 'applycomplete'})
 
-        const channelNo = this.channelNo
-        const sellerId = this.sellerId
-        const param = _.assign({}, {channelNo, sellerId, step: 4})
-        this.$store.dispatch('savaLoanInfo', {param, fn: this.setDisable})
+        // const channelNo = this.channelNo
+        // const sellerId = this.sellerId
+        // const param = _.assign({}, {channelNo, sellerId, step: 4})
+        // this.$store.dispatch('savaLoanInfo', {param, fn: this.setDisable})
       },
       initData (image, address = '') {
         const {idImageOn, idImageIn, workImage, chandiaoImage, yixiangImage, otherImage} = image || {}
@@ -198,7 +199,7 @@
     },
     mounted () {
       this.eventBus.$on('confirm/ok', this.confirmRemove)
-      this.initData(_.assign({}, this.loanInfo.image), this.loanInfo.address)
+      // this.initData(_.assign({}, this.loanInfo.image), this.loanInfo.address)
     },
     components: {
       UploadPic,

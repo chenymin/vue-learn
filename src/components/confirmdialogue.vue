@@ -1,6 +1,6 @@
 <template>
   <cover-container :is-touch-close='isTouchClose' ref='coverCom'>
-    <div class='content-container' slot='cover-slot'>
+    <div class='content-container' slot='cover-slot' v-if="isShowConfirmDialogue">
       <div class='content'>
         <p class='text'>{{text}}</p>
         <slot name='btn-group'>
@@ -17,7 +17,13 @@
 
 <script>
 import CoverContainer from './base/cover'
+
 export default {
+  data () {
+    return {
+      isShowConfirmDialogue: this.isShow
+    }
+  },
   props: {
     isTouchClose: {
       type: Boolean,
@@ -26,6 +32,10 @@ export default {
     text: {
       type: String,
       default: '确定申请提前还款'
+    },
+    isShow: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -33,10 +43,12 @@ export default {
       this.eventBus.$emit('confirm/ok')
     },
     cancleModal () {
+      this.isShowConfirmDialogue = false
       this.$refs.coverCom.hiddenCover()
       this.eventBus.$emit('confirm/cancle')
     },
     showCofirm  () {
+      this.isShowConfirmDialogue = true
       this.$refs.coverCom.showCover()
     }
   },
