@@ -8,6 +8,7 @@ Vue.use(Router)
 const PushDemo = r => require.ensure([], () => r(require('@/views/push-demo')), 'chunk-pushdemo')
 const demo = r => require.ensure([], () => r(require('@/views/demo')), 'chunk-demo')
 const SliderCard = r => require.ensure([], () => r(require('@/views/slider-card')), 'chunk-sliderCard')
+const TransitionExpand = r => require.ensure([], () => r(require('@/views/transitionexpand-demo')), 'chunk-transitionexpand')
 const ScrollList = r => require.ensure([], () => r(require('@/views/scroll-list')), 'chunk-scrollList')
 const NavButton = r => require.ensure([], () => r(require('@/views/nav-button')), 'chunk-navButton')
 
@@ -16,6 +17,7 @@ const router = new Router({
     { name: 'pushdemo', path: '/pushdemo', component: PushDemo, meta: { auth: false, title: '下拉刷新' } },
     { name: 'demo', path: '/demo', component: demo, meta: { auth: false, title: 'demo' } },
     { name: 'slidercard', path: '/slidercard', component: SliderCard, meta: { auth: false, title: 'slidercard' } },
+    { name: 'transitionexpand', path: '/transitionexpand', component: TransitionExpand, meta: { auth: false, title: 'transitionexpand' } },
     { name: 'scrolllist', path: '/scrolllist', component: ScrollList, meta: { auth: false, title: 'scrolllist' } },
     { name: 'navbutton', path: '/navbutton', component: NavButton, meta: { auth: false, title: 'navButton' } }
   ]

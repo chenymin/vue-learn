@@ -12,6 +12,7 @@
 </template>
 
 <script>
+  import { TweenMax, Elastic } from 'gsap/all'
   export default {
     data () {
       return {
@@ -33,10 +34,10 @@
       selectButton (id) {
         const previousButton = this.$refs[`button_${this.selectedId}`]
         const nextButton = this.$refs[`button_${id}`]
-        
+  
         this.selectedId = id
         this.animateBgColor()
-        
+
         this.animateOut(previousButton)
         this.animateIn(nextButton)
       },
@@ -45,13 +46,13 @@
           selectedBgColor: this.selectedButton.bgColor
         })
       },
-      animateIn (btn) {      
+      animateIn (btn) {
         // animate icon color
         TweenMax.to(btn, 0.3, {
           backgroundColor: this.selectedButton.color,
           color: 'white'
         })
-                    
+
         // animate button width
         TweenMax.to(btn, 0.7, {
           width: 100,
@@ -64,7 +65,7 @@
           backgroundColor: 'white',
           color: 'gray'
         })
-        
+
         // animate button width
         TweenMax.to(btn, 0.7, {
           width: 50,
@@ -79,7 +80,6 @@
     }
   }
 </script>
-
 
 <style lang="scss" scoped>
 .btn-container {

@@ -1,28 +1,30 @@
 <template>
   <div class="uploadpic-container">
-    <div v-if='isShow'>
-      <ul class="pic-list">
-        <li class="list-item" v-for="(item, index) in imgList" :key='index'>
-          <img class='upload-pic' :src='item.fileUrl' alt="" :class="{'aspectFill-x': item.classType, 'aspectFill-y': item.classType === 0}">
-          <img class="img-remove" src="../assets/icon_close.png" @click.prevent="imgRemove(index, item.fileId)">
-        </li>
-        <li class="list-item" v-if="imgList.length < limitImg">
-          <label class="list-item-label" :for="inputId">
-            <img class="pic-camera" src="../assets/camera.png" alt="" v-if="status === 0">
-            <img class='pic-bg' :src="getPic()" alt="">
-            <span class="upload-text" v-if="status === 0">上传图片</span>
-            <span class="upload-fail" v-if="status === 2">图片上传失败<br>点击重新上传</span>
-            <div class="uploading" v-if="status === 1">
-              <p class='text'>图片上传中</p>
-              <p class="upload-progress">
-                <span class="progressing" :style="progressStyle"></span>
-              </p>
-            </div>
-            <input ref="uploadFileInput" class="upload-input" type="file" :id="inputId" :accept="accept" @change.prevent="upload" :disabled='status === 1'>
-          </label>
-        </li>
-      </ul>
-    </div>
+    <transition-expand>
+      <div v-if='isShow'>
+        <ul class="pic-list">
+          <li class="list-item" v-for="(item, index) in imgList" :key='index'>
+            <img class='upload-pic' :src='item.fileUrl' alt="" :class="{'aspectFill-x': item.classType, 'aspectFill-y': item.classType === 0}">
+            <img class="img-remove" src="../assets/icon_close.png" @click.prevent="imgRemove(index, item.fileId)">
+          </li>
+          <li class="list-item" v-if="imgList.length < limitImg">
+            <label class="list-item-label" :for="inputId">
+              <img class="pic-camera" src="../assets/camera.png" alt="" v-if="status === 0">
+              <img class='pic-bg' :src="getPic()" alt="">
+              <span class="upload-text" v-if="status === 0">上传图片</span>
+              <span class="upload-fail" v-if="status === 2">图片上传失败<br>点击重新上传</span>
+              <div class="uploading" v-if="status === 1">
+                <p class='text'>图片上传中</p>
+                <p class="upload-progress">
+                  <span class="progressing" :style="progressStyle"></span>
+                </p>
+              </div>
+              <input ref="uploadFileInput" class="upload-input" type="file" :id="inputId" :accept="accept" @change.prevent="upload" :disabled='status === 1'>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </transition-expand>
   </div>
 </template>
 
@@ -30,6 +32,7 @@
   import Exif from 'exif-js'
   import {getStore} from '../utils/storage'
   import {uploadPic, deletePic} from '../api/carLoanApply'
+  import TransitionExpand from './transitionExpand'
 
   export default {
     data () {
@@ -345,6 +348,9 @@
       'validOff' () {
         this.emitValidate()
       }
+    },
+    components: {
+      TransitionExpand
     },
     mounted () {
       this.initImg()
