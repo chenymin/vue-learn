@@ -166,12 +166,6 @@
 
 <style lang="scss" scoped>
   .selection-container {
-    .list-fade-enter-active, .list-fade-leave-active {
-      transition: all 0.4s ease-out;
-    }
-    .list-fade-enter, .list-fade-leave-active {
-      transform: translateY(7rem);
-    }
     .form-filed {
       position: relative;
       display: flex;
