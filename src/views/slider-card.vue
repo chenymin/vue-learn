@@ -53,7 +53,6 @@
     },
     methods: {
       startDrag (e) {
-        debugger
         this.dragging = true
         this.initialMouseX = e.pageX
         this.initialCardsX = this.cardsX
