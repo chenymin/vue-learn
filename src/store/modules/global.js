@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {getStore, setStore, removeStore} from '../../utils/storage'
+import {setStore, removeStore} from '../../utils/storage'
 import {isWeixin} from '../../utils/util'
 
 const state = {
@@ -11,25 +11,20 @@ const state = {
   },
   localApplyEdit: {},
   validatorMsg: {},
-  channelNo: '',
-  sellerId: '',
-  openId: '',
-  projectNo: '',
-  loanAppNo: '',
-  fullPath: ''
+  fullPath: '',
+  currentRouterInfo: {
+    title: '',
+    alone: ''
+  }
 }
 
 const getters = {
   toast: state => state.toast,
   validatorMsg: state => state.validatorMsg,
   applyEdit: state => state.applyEdit,
-  channelNo: state => state.channelNo,
-  sellerId: state => state.sellerId,
-  openId: state => state.openId,
-  projectNo: state => state.projectNo,
-  loanAppNo: state => state.loanAppNo,
   localApplyEdit: state => state.localApplyEdit,
-  fullPath: state => state.fullPath
+  fullPath: state => state.fullPath,
+  currentRouterInfo: state => state.currentRouterInfo
 }
 
 const actions = {
@@ -62,15 +57,11 @@ const mutations = {
   cleanApplyEdit () {
     state.applyEdit = {}
   },
-  getChannelInfo () {
-    state.channelNo = getStore('channelNo')
-    state.sellerId = getStore('sellId')
-    state.openId = getStore('openId')
-    state.projectNo = getStore('projectNo')
-    state.loanAppNo = getStore('loanAppNo')
-  },
   changeFullPath (state, item) {
     state.fullPath = item
+  },
+  changeRouterInfo (state, {title, along}) {
+    state.currentRouterInfo = Object.assign({}, {title, along})
   }
 }
 

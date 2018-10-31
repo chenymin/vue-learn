@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <transition-page>
-      <router-view></router-view>
-    </transition-page>
+    <component :is="layout">
+      <transition-page>
+        <router-view :layout.sync="layout"/>
+      </transition-page>
+    </component>
     <my-toast
            :title="toast.title"
            :content="toast.content">
@@ -19,6 +21,11 @@ import TransitionPage from './components/transition/transitionpage'
 
 export default {
   name: 'app',
+  data () {
+    return {
+      layout: `div`
+    }
+  },
   computed: {
     ...mapGetters([
       'toast'
@@ -30,7 +37,7 @@ export default {
     TransitionPage
   },
   created () {
-    this.$store.commit('getChannelInfo')
+    // this.$store.commit('getChannelInfo')
   }
 }
 </script>

@@ -2,16 +2,16 @@
   <div class="switch-container" >
     <div class="form-filed">
         <label class="label">{{label}}</label>
-        <label class="switch-label" 
+        <label class="switch-label"
           :class="{'active': isActive, 'unactive': !isActive}"
-          :style="labelStyle" 
+          :style="labelStyle"
           :checkedText='checkedText'
           :uncheckedText='uncheckedText'
           >
           <span class="circle" :style="circleStyle"></span>
-          <span class="text" :style="textStyle" v-text="isActive ? checkedText : uncheckedText"></span> 
+          <span class="text" :style="textStyle" v-text="isActive ? checkedText : uncheckedText"></span>
           <input @change.stop="toggle" type="checkbox" class="switch-input">
-        </label>  
+        </label>
     </div>
   </div>
 </template>
@@ -110,6 +110,13 @@
 
 <style lang="scss" scoped>
   .switch-container {
+    display: flex;
+    flex: 1;
+    .form-filed {
+      display: flex;
+      flex: 1;
+      align-items: center;
+    }
     .label {
       flex: 1
     }
@@ -117,7 +124,7 @@
       display: flex;
       position: relative;
       overflow: hidden;
-      border-radius: 0.4rem; 
+      border-radius: 0.4rem;
       .circle {
         content: '';
         position: absolute;
@@ -157,4 +164,3 @@
     }
   }
 </style>
-
