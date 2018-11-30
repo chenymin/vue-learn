@@ -1,5 +1,5 @@
 <template>
-  <cover-container :is-touch-close='isTouchClose' ref='coverCom'>
+  <cover-container :is-touch-close='isTouchClose' ref='coverCom' v-model="isShowConfirmDialogue">
     <div class='content-container' slot='cover-slot' v-if="isShowConfirmDialogue">
       <div class='content'>
         <p class='text'>{{text}}</p>
@@ -44,7 +44,6 @@ export default {
     },
     cancleModal () {
       this.isShowConfirmDialogue = false
-      this.$refs.coverCom.hiddenCover()
       this.eventBus.$emit('confirm/cancle')
     },
     showCofirm  () {

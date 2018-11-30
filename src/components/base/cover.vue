@@ -13,6 +13,10 @@
         isShowCover: this.isShow
       }
     },
+    model: {
+      prop: 'isShow',
+      event: 'cover-hidden'
+    },
     props: {
       isTouchClose: {
         type: Boolean,

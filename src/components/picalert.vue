@@ -1,26 +1,28 @@
 <template>
-  <div class="pic-alert" v-if="isShow" @touchmove.prevent>
-    <div class='alert-cover' @click.prevent="cancel"></div>
-    <div class="common-bounced sendnum alert">
-      <div class="title">图形验证码</div>
-      <p class="promp-text">为了您的账户安全，请填写图形验证码</p>
-      <div class="send-input">
-        <span class="name">
-          <input type="text" name="email" placeholder="请填写图形验证码" class="fs32" v-model="captchaCode">
-          <img :src="picCodePath" @click.prevent="refreshCode" >
-        </span>
-      </div>
-      <slot name="btu-group">
-        <div class="btn text-center btn-group">
-          <button class="cancel" @click.prevent="cancel">取消</button>
-          <button class="confirm" @click.prevent.stop="confirm">确定</button>
+  <cover-container :is-touch-close='isTouchClose' ref='coverCom'  v-model="isShow">
+    <div class="pic-alert" slot='cover-slot' v-if="isShow" @touchmove.prevent>
+      <div class="common-bounced sendnum alert">
+        <div class="title">图形验证码</div>
+        <p class="promp-text">为了您的账户安全，请填写图形验证码</p>
+        <div class="send-input">
+          <span class="name">
+            <input type="text" name="email" placeholder="请填写图形验证码" class="fs32" v-model="captchaCode">
+            <img :src="picCodePath" @click.prevent="refreshCode" >
+          </span>
         </div>
-      </slot>
-	  </div>
-  </div>
+        <slot name="btu-group">
+          <div class="btn text-center btn-group">
+            <button class="cancel" @click.prevent="cancel">取消</button>
+            <button class="confirm" @click.prevent.stop="confirm">确定</button>
+          </div>
+        </slot>
+      </div>
+    </div>
+  </cover-container>
 </template>
 
 <script>
+  import CoverContainer from './base/cover'
   export default {
     data () {
       return {
@@ -30,6 +32,10 @@
       }
     },
     props: {
+      isTouchClose: {
+        type: Boolean,
+        default: false
+      },
       url: {
         url: String,
         default: ''
@@ -46,6 +52,7 @@
     methods: {
       cancel () {
         this.isShow = false
+        this.$refs.coverCom.hiddenCover()
       },
       confirm () {
         if (!this.captchaCode.length >= 1) {
@@ -58,9 +65,10 @@
       refreshCode () {
         this.picCodePath = `${this.url}/v1/captcha/captcha?mobile=${this.mobile.replace(/\s+/g, '')}&date=${new Date()}`
       },
-      showPicAlert (isShow) {
+      showPicAlert () {
         this.initData()
-        this.isShow = isShow
+        this.isShow = true
+        this.$refs.coverCom.showCover()
       },
       initData () {
         this.captchaCode = ''
@@ -75,21 +83,15 @@
     destroyed () {
       this.eventBus.$off('picAlert/show')
       this.eventBus.$off('picAlert/init')
+    },
+    components: {
+      CoverContainer
     }
   }
 </script>
 
 <style lang="scss" scoped>
   .pic-alert {
-    .alert-cover {
-      position: absolute;
-      top: 0;
-      z-index: 10;
-      height: 100%;
-      width: 100%;
-      background-color: #929292;
-      opacity: .8;
-    }
     .btn-group {
       display: flex;
       .cancel {

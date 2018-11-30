@@ -1,7 +1,8 @@
 <template>
   <div>
-    <confirm-dialogue :is-touch-close='isTouchClose' :is-show="confirmDialogueIsShow">
+    <confirm-dialogue :is-touch-close='isTouchClose'>
     </confirm-dialogue>
+    <pic-alert :is-touch-close='isTouchClose' ></pic-alert>
     <button @click="myMethods">显示确认组件</button>
     <!-- <select-search :list="list"></select-search>
     <dots-loader></dots-loader> -->
@@ -14,6 +15,7 @@
   // import SelectSearch from '../components/select-search.vue'
   // import DotsLoader from '../components/loading/dots-loader.vue'
   import Selection from '../components/selection.vue'
+  import PicAlert from '../components/picalert'
 
   export default {
     data () {
@@ -56,7 +58,7 @@
           },
           model: 'bankCode'
         },
-        isTouchClose: true,
+        isTouchClose: false,
         list: [
           {
             label: '工商银行',
@@ -84,7 +86,8 @@
     methods: {
       myMethods () {
         this.confirmDialogueIsShow = true
-        this.eventBus.$emit('confirm/show')
+        // this.eventBus.$emit('confirm/show')
+        this.eventBus.$emit('picAlert/show')
       },
       test () {
         console.log('点击确认')
@@ -94,7 +97,8 @@
       ConfirmDialogue,
       // SelectSearch,
       // DotsLoader,
-      Selection
+      Selection,
+      PicAlert
     },
     mounted () {
       this.eventBus.$on('confirm/ok', this.test)
