@@ -7,6 +7,13 @@
     <!-- <select-search :list="list"></select-search>
     <dots-loader></dots-loader> -->
     <selection :props="selectionCard.props" :model="selectionCard.model"></selection>
+    <my-text-input
+      v-model="email"
+      label="Email"
+      type="email"
+      v-validate="'required|email'"
+      :error="errors.first('Email')"
+    ></my-text-input>
   </div>
 </template>
 
@@ -16,10 +23,12 @@
   // import DotsLoader from '../components/loading/dots-loader.vue'
   import Selection from '../components/selection.vue'
   import PicAlert from '../components/picalert'
+  import MyTextInput from '../components/mytestinput'
 
   export default {
     data () {
       return {
+        email: null,
         confirmDialogueIsShow: false,
         selectionCard: {
           props: {
@@ -98,7 +107,8 @@
       // SelectSearch,
       // DotsLoader,
       Selection,
-      PicAlert
+      PicAlert,
+      MyTextInput
     },
     mounted () {
       this.eventBus.$on('confirm/ok', this.test)
