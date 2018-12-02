@@ -7,12 +7,21 @@
     <!-- <select-search :list="list"></select-search>
     <dots-loader></dots-loader> -->
     <selection :props="selectionCard.props" :model="selectionCard.model"></selection>
-    <my-text-input
+    
+     <my-text-input
       v-model="email"
       label="Email"
       type="email"
       v-validate="'required|email'"
       :error="errors.first('Email')"
+    ></my-text-input>
+
+    <my-text-input
+      v-model="phone"
+      label="手机号"
+      type="text"
+      v-validate="'required|phone'"
+      :error="errors.first('手机号')"
     ></my-text-input>
   </div>
 </template>
@@ -29,6 +38,7 @@
     data () {
       return {
         email: null,
+        phone: null,
         confirmDialogueIsShow: false,
         selectionCard: {
           props: {

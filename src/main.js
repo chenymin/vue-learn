@@ -7,18 +7,19 @@ import store from './store'
 import * as filters from './utils/filters'
 import eventBus from './utils/eventBus'
 import './utils/_polyfill'
-import zh from 'vee-validate/dist/locale/zh_CN'
 import VeeValidate, {Validator} from 'vee-validate'
 import dictionary from './utils/validatorConfig'
-
-Validator.addLocale(zh)
+import zh from 'vee-validate/dist/locale/zh_CN'
 
 // 修改默认错误提示
-Validator.updateDictionary(dictionary)
+const config = {
+  locale: zh,
+  inject: true
+}
 
-Vue.use(VeeValidate, {
-  locale: 'zh_CN'
-})
+Validator.localize(dictionary)
+Validator.localize('zh_CN')
+Vue.use(VeeValidate, config)
 
 Vue.config.productionTip = false
 
