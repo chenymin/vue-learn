@@ -1,7 +1,7 @@
 {
-  "name": "fosunapply",
+  "name": "mycomponents",
   "version": "1.0.0",
-  "description": "复星金服申请微服务",
+  "description": "",
   "author": "cym",
   "private": true,
   "scripts": {

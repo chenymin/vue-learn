@@ -19,7 +19,7 @@
 
 <script>
   export default {
-    name: 'input',
+    name: 'my-input',
     data () {
       return {
         form: {

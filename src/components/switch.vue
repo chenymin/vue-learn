@@ -18,6 +18,10 @@
 
 <script>
   export default {
+    model: {
+      prop: 'defauleValue',
+      event: 'switch-change'
+    },
     data () {
       return {
         isActive: this.defauleValue
@@ -89,7 +93,7 @@
     methods: {
       toggle () {
         this.isActive = !this.isActive
-        this.eventBus.$emit(`switch/${this.eventType}`, this.isActive)
+        this.$emit(`switch-change`, this.isActive)
         this.commitValue()
       },
       commitValue () {

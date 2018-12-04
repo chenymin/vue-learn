@@ -1,6 +1,6 @@
 <template>
   <div class="sms-container">
-    <sms-input :props='props' :model='model' ref="smsCode">
+    <sms-input :props='props' :model='model' ref="smsCode" @myInput="getValue">
       <button slot="input-slot" class='sms-code' 
         :disabled="!isCountDisable" 
         :class="{'able-activity': isCountDisable}" 
@@ -13,6 +13,10 @@
 <script>
   import SmsInput from './input.vue'
   export default {
+    model: {
+      prop: 'smsCode',
+      event: 'sms-change'
+    },
     data () {
       return {
         countInterval: '',
@@ -44,9 +48,16 @@
       mobile: {
         type: String,
         default: ''
+      },
+      smsCode: {
+        type: String,
+        default: ''
       }
     },
     methods: {
+      getValue (item) {
+        this.$emit('sms-change', item[this.model])
+      },
       sendCode () {
         const {model, form} = this.$refs.smsCode
         this.eventBus.$emit('smsverification/send', {type: this.type, [model]: form[model], mobileNum: this.mobile})

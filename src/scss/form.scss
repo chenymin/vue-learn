@@ -29,9 +29,13 @@
       font-size: $middle-font-size;
     }
     .unit {
+      position: absolute;
+      width: 1rem;
+      right: 0.3rem;
+      top: 50%;
+      margin-top: -0.2rem;
       font-size: $middle-font-size;
       color: #444;
-      width: 1rem;
       text-align: right;
     }
    .term {

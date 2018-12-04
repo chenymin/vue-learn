@@ -1,36 +1,64 @@
 <template>
-  <div class="prompt-alert" v-if="isShow">
-    <div class='alert-cover' @click.prevent="cancel"></div>
-    <div class="alert-content">
-      <span class="title" v-if="isShowTitle">提示</span>
-      <slot name="prompt-content">
-        <p class="content-text">{{content}}</p>
-      </slot>
-      <slot name="prompt-btn">
-        <button class="confirm-btn" @click="cancel">我知道了</button>
-      </slot>
+  <cover-container :is-touch-close='isTouchClose' ref='coverCom' v-model="isPromptAlertShow">
+    <div class="prompt-alert" slot='cover-slot' v-if="isPromptAlertShow">
+      <div class="alert-content">
+        <span class="title">{{showTitle}}</span>
+        <slot name="prompt-content">
+          <p class="content-text">{{content}}</p>
+        </slot>
+        <slot name="prompt-btn">
+          <button class="confirm-btn" @click="cancel">我知道了</button>
+        </slot>
+      </div>
     </div>
-  </div>
+  </cover-container>
 </template>
 
 <script>
+  import CoverContainer from './base/cover'
   export default {
+    model: {
+      prop: 'isShow',
+      event: 'prompt-cancel'
+    },
     data () {
       return {
-        isShow: false
+        isPromptAlertShow: this.isShow
       }
     },
-    props: ['content', 'isShowTitle'],
+    props: {
+      content: {
+        type: String,
+        default: ''
+      },
+      showTitle: {
+        type: String,
+        default: '提示'
+      },
+      isTouchClose: {
+        type: Boolean,
+        default: false
+      },
+      isShow: {
+        type: Boolean,
+        default: false
+      }
+    },
     methods: {
       cancel () {
-        this.isShow = false
+        this.isPromptAlertShow = false
+        this.$emit('prompt-cancel', false)
       },
       promptAlertShow () {
-        this.isShow = true
+        this.isPromptAlertShow = true
+        this.$refs.coverCom.showCover()
       },
       promptAlertHidden () {
-        this.isShow = false
+        this.isPromptAlertShow = false
       }
+    },
+    components: {
+      CoverContainer
     },
     created () {
       this.eventBus.$on('promptAlert/show', this.promptAlertShow)
