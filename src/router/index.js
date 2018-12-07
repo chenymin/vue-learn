@@ -60,4 +60,37 @@ function clearInfo () {
   store.commit('cleanValidatorMsg')
   store.commit('cleanApplyEdit')
 }
+
+/**
+ * 加载异步组件
+ * @param {String}} url
+ */
+const asyncGetComponent = (url = '@/views/notFound') => {
+  return (resolve) => require([`@/views${url}`], resolve)
+}
+
+/**
+ * 组合路由数据
+ * @param {Array} navList
+ * @param {String}} url
+ */
+export const composeRouter = () => {
+  const routerList = []
+  const recursiveArr = (arr, level = '') => {
+    console.log(level)
+    arr.map(({menuName, url, childTree}, index) => {
+      if (Array.isArray(childTree)) {
+        recursiveArr(childTree, level === '' ? `${index + 1}` : `${level}-${index}`)
+      } else {
+        console.log(`${level}-${index}`)
+      }
+      if (url && url !== 'null') {
+        const routerItem = Object.assign({}, {path: url, component: asyncGetComponent(url), meta: {auth: true, title: menuName}})
+        routerList.push(routerItem)
+      }
+    })
+    return routerList
+  }
+  return recursiveArr
+}
 export default router

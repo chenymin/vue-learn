@@ -54,7 +54,7 @@ export default {
   components: {
     CoverContainer
   },
-  created () {
+  mounted () {
     this.eventBus.$on('confirm/show', this.showCofirm)
     this.eventBus.$on('confirm/hidden', this.cancleModal)
   },

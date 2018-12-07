@@ -60,7 +60,7 @@
     components: {
       CoverContainer
     },
-    created () {
+    mounted () {
       this.eventBus.$on('promptAlert/show', this.promptAlertShow)
       this.eventBus.$on('promptAlert/hidden', this.promptAlertHidden)
     },
