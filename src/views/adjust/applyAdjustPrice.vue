@@ -729,10 +729,10 @@ export default {
     }
   },
   created () {
-    setTimeout(() => {
+    this.$nextTick(() => {
       this._initScroll()
       this._calculateHeight()
-    }, 200)
+    })
     // this.$store.dispatch('fetchGoodsInfo').then(({code}) => {
     //   if (code === 200) {
     //     setTimeout(() => {

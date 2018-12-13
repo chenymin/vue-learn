@@ -10,7 +10,7 @@
     <button @click="myMethods">显示确认组件</button>
     <!-- <select-search :list="list"></select-search>
     <dots-loader></dots-loader> -->
-    <selection :props="selectionCard.props" :model="selectionCard.model"></selection>
+    <!--<selection :props="selectionCard.props" :model="selectionCard.model"></selection>-->
     <div class="form-wrap">
       <my-text-input
         v-model="email"
@@ -26,8 +26,6 @@
         type="text"
         v-validate="'required|phone'"
         :error="errors.first('手机号')"
-        :disabled="true"
-        :unit="'元'"
       ></my-text-input>
       <my-switch v-model="isSwitch"></my-switch>
       <sms-verification v-model="smsVer.props.value"
@@ -35,6 +33,10 @@
                         :model="smsVer.model">
       </sms-verification>
     </div>
+    <list></list>
+    <anchored-heading :level="1">
+      <span>Hello</span> world!
+    </anchored-heading>
   </div>
 </template>
 
@@ -48,6 +50,59 @@
   import MySwitch from '../components/switch'
   import SmsVerification from '../components/smsverification'
   import PromptAlert from '../components/promptalert'
+  import List from './List'
+  import Vue from 'vue'
+
+  var getChildrenTextContent = function (children) {
+    return children.map(function (node) {
+      return node.children
+        ? getChildrenTextContent(node.children)
+        : node.text
+    }).join('')
+  }
+
+  Vue.component('anchored-heading', {
+    methods: {
+      clickHandler () {
+        console.log('---->')
+      }
+    },
+    render: function (createElement) {
+      // 创建 kebab-case 风格的ID
+      var headingId = getChildrenTextContent(this.$slots.default)
+        .toLowerCase()
+        .replace(/\W+/g, '-')
+
+      return createElement(
+        'h' + this.level,
+        [
+          createElement('a', {
+            attrs: {
+              name: headingId,
+              href: '#' + headingId
+            }
+          }, this.$slots.default),
+          createElement('p', {
+            style: {
+              color: 'red',
+              fontSize: '14px'
+            },
+            on: {
+              click: this.clickHandler
+            }
+          }, [
+            createElement('label', '子组件1')
+          ])
+        ]
+      )
+    },
+    props: {
+      level: {
+        type: Number,
+        required: true
+      }
+    }
+  })
 
   export default {
     data () {
@@ -152,13 +207,11 @@
       MyTextInput,
       MySwitch,
       SmsVerification,
-      PromptAlert
+      PromptAlert,
+      List
     },
     mounted () {
       this.eventBus.$on('confirm/ok', this.test)
-      setTimeout(() => {
-        this.email = '912072089@qq.com'
-      }, 1000)
     },
     destroyed () {
       this.eventBus.$off('confirm/ok')
