@@ -3,14 +3,12 @@
     <div class="form-filed">
       <label v-if='label ' class="label">{{ label }}</label>
       <input  class="value"
-              :data-vv-as="label"
               :type='type'
-              :value='value'
               @input='updateValue'
-              @change='updateValue'
               @blur="$emit('blur')"
               :readonly="readonly"
               :disabled='disabled'
+              :placeholder="placeholder"
               :class="{ 'input': true, 'input__error': !!error }">
       <slot name='input-slot'></slot>
       <span class="unit" v-if="unit !== ''">{{unit}}</span>
@@ -32,9 +30,10 @@ export default {
     }
   },
   props: {
-    value: String,
+    value: [String, Number],
     label: {
-      type: String
+      type: String,
+      default: ''
     },
     disabled: {
       type: Boolean,
@@ -60,6 +59,10 @@ export default {
           ['url', 'text', 'password', 'email', 'search', 'tel'].indexOf(val) !== -1
         )
       }
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
   methods: {

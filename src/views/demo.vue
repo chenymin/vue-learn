@@ -27,20 +27,33 @@
         v-validate="'required|phone'"
         :error="errors.first('手机号')"
       ></my-text-input>
-      <my-switch v-model="isSwitch"></my-switch>
-      <sms-verification v-model="smsVer.props.value"
-                        :props="smsVer.props"
-                        :model="smsVer.model">
-      </sms-verification>
+
+      <!--<my-switch v-model="isSwitch"></my-switch>-->
+
+      <!--<sms-verification v-model="smsVer.props.value"-->
+                        <!--:props="smsVer.props"-->
+                        <!--:model="smsVer.model">-->
+      <!--</sms-verification>-->
+
+      <multiplexing-input v-model="phone1"
+                          :label="filed.label"
+                          v-validate="'required|phone'"
+                          :error="errors.first('手机号码1')">
+      </multiplexing-input>
     </div>
+
+
     <list></list>
     <anchored-heading :level="1">
       <span>Hello</span> world!
     </anchored-heading>
+
+    <mytest  :title="title" :massgae="massgae"></mytest>
   </div>
 </template>
 
 <script>
+  import MultiplexingInput from '../components/multiplexingInput.vue'
   import ConfirmDialogue from '../components/confirmdialogue.vue'
   // import SelectSearch from '../components/select-search.vue'
   // import DotsLoader from '../components/loading/dots-loader.vue'
@@ -107,6 +120,13 @@
   export default {
     data () {
       return {
+        filed: {
+          label: '手机号码1',
+          type: 'text',
+          value: '123456'
+        },
+        title: '测试title',
+        massgae: 'message111',
         promptShow: false,
         smsVer: {
           isSendDisable: false,
@@ -122,6 +142,7 @@
         isSwitch: false,
         email: null,
         phone: null,
+        phone1: null,
         selectionCard: {
           props: {
             title: '开户行',
@@ -208,7 +229,20 @@
       MySwitch,
       SmsVerification,
       PromptAlert,
-      List
+      List,
+      MultiplexingInput,
+      'mytest': {
+        template: `<div>这是个h1标题{{title}}</div>`,
+        props: ['title'],
+        data () {
+          return {
+            mag: '111'
+          }
+        },
+        created () {
+          console.log(this.$attrs) // 注意这里
+        }
+      }
     },
     mounted () {
       this.eventBus.$on('confirm/ok', this.test)

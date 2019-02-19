@@ -14,6 +14,7 @@ const NavButton = r => require.ensure([], () => r(require('@/views/nav-button'))
 const OverLay = r => require.ensure([], () => r(require('@/views/over-lay')), 'chunk-overlay')
 const StateManager = r => require.ensure([], () => r(require('@/views/state-manager')), 'chunk-stateManager')
 const ApplyAdjustPrice = r => require.ensure([], () => r(require('@/views/adjust/applyAdjustPrice')), 'chunk-applyAdjustPrice')
+const FormGeneratorPape = r => require.ensure([], () => r(require('@/views/FormGeneratorPape')), 'chunk-formGenerator')
 
 const router = new Router({
   routes: [
@@ -25,7 +26,8 @@ const router = new Router({
     {name: 'scrolllist', path: '/scrolllist', component: ScrollList, meta: {auth: false, title: 'scrolllist'}},
     {name: 'navbutton', path: '/navbutton', component: NavButton, meta: {auth: false, title: 'navButton', transitionName: `slide`}},
     {name: 'overlay', path: '/overlay', component: OverLay, meta: {auth: false, title: 'overlay', transitionName: `zoom`}},
-    {name: 'apply', path: '/apply', component: ApplyAdjustPrice, meta: {auth: false, title: '商品', transitionName: `zoom`}}
+    {name: 'apply', path: '/apply', component: ApplyAdjustPrice, meta: {auth: false, title: '商品', transitionName: `zoom`}},
+    {name: 'formGenerator', path: '/formgenerator', component: FormGeneratorPape, meta: {auth: false, title: '自定义表单', transitionName: `zoom`}}
   ]
 })
 
