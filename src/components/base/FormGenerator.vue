@@ -9,16 +9,16 @@
                :error="errors.first(field.label)"
                v-bind="field">
     </component>
-    <button @click="myMethods">显示确认组件</button>
   </div>
 </template>
 
 <script>
   import MyInput from '../myinput'
+  import SmsCode from '../multiplexingInput'
 
   export default {
     name: 'FormGenerator',
-    components: { MyInput },
+    components: { MyInput, SmsCode },
     props: {
       value: {
         type: Object,
@@ -43,10 +43,13 @@
         this.$set(this.formData, fieldName, value)
         this.$emit('input', this.formData)
       },
-      myMethods () {
-        this.$validator.validateAll().then((item, a) => {
-          console.log(item, this.$validator.errors.items)
+      validator () {
+        const promise = new Promise((resolve, reject) => {
+          this.$validator.validateAll().then((isValid) => {
+            isValid ? resolve({isValid}) : reject({errorMsg: this.$validator.errors.items})
+          })
         })
+        return promise
       }
     }
   }
