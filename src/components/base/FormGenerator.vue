@@ -5,20 +5,25 @@
                :is="field.fieldType"
                v-model="formData[field.model]"
                @input="updateForm(field.model, $event)"
-               v-validate="field.rules"
+               v-validate="field.rules || {}"
                :error="errors.first(field.label)"
                v-bind="field">
+      <slot :field="field">
+        <!-- 默认内容 -->
+        {{ field.fieldType }}
+      </slot>
     </component>
   </div>
 </template>
 
 <script>
+  import MyLabel from '../label'
   import MyInput from '../myinput'
   import SmsCode from '../multiplexingInput'
 
   export default {
     name: 'FormGenerator',
-    components: { MyInput, SmsCode },
+    components: { MyInput, SmsCode, MyLabel },
     props: {
       value: {
         type: Object,

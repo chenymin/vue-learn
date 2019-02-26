@@ -17,13 +17,18 @@
         },
         schema: [
           {
+            fieldType: 'MyLabel',
+            labelText: '显示'
+          },
+          {
             fieldType: 'MyInput',
             model: 'email',
             label: '电子邮箱',
             placeholder: '请输入电子邮箱',
             rules: {
               required: true
-            }
+            },
+            slot: 'sdsdsd'
           },
           {
             fieldType: 'MyInput',

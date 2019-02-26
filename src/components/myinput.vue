@@ -10,7 +10,7 @@
               :disabled='disabled'
               :placeholder="placeholder"
               :class="{ 'input': true, 'input__error': !!error }">
-      <slot name='input-slot'></slot>
+      <slot></slot>
       <span class="unit" v-if="unit !== ''">{{unit}}</span>
     </div>
     <transition name='slide'>
