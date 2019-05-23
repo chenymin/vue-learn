@@ -25,22 +25,9 @@
       legalInfoAction () {
         // TODO 待删除
         this.$router.push({name: this.nextJumpUrl})
-        this.$store.dispatch('saveLegalPersonInfo', this.formData).then(res => {
-          if (res.respCode === '000000') {
-            this.$router.push({name: this.nextJumpUrl})
-          }
-        })
       },
       getlegalInfo () {
-        this.$store.dispatch('getLegalPersonInfo').then(res => {
-          if (res.respCode === '000000') {
-            Object.assign(this.formData, res.data.legalPersonInfo)
-            this.findSchemaItems(['legalPersonBankCode'])[0].list = res.data.banksList
-            if (res.data.legalPersonInfo.bankValidateResult === '01') {
-              this.modifySchemeItem(this.schema, this.needModifyScheme)
-            }
-          }
-        })
+        // this.modifySchemeItem(this.schema, this.needModifyScheme)
       },
       isShowSendCodeBtn (newVal) {
         const smsInfo = this.findSchemaItems(['smsCode'])[0]

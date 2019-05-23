@@ -23,24 +23,9 @@
       enterpriseInfoAction () {
         // TODO 待删除
         this.$router.push({name: this.nextJumpUrl})
-        const param = Object.assign({}, this.formData, {appAmt: this.formData.appAmt * 10000})
-        this.$store.dispatch('saveLimitApplyInfo', param).then(res => {
-          if (res.respCode === '000000') {
-            this.$router.push({name: this.nextJumpUrl})
-          }
-        })
       },
       getEnterpriseInfo () {
-        this.$store.dispatch('getLimitApplyInfo').then(res => {
-          if (res.respCode === '000000') {
-            const {province, city, area, appAmt} = res.data.enterpriseInfo
-            const provincialDetail = province !== null && city !== null && area !== null ? `${province}-${city}-${area}` : ''
-            Object.assign(this.formData, res.data.enterpriseInfo, {provincialDetail, appAmt: appAmt / 10000})
-            if (res.data.enterpriseInfo.lfzxValidateResult === '01') {
-              this.modifySchemeItem(this.schema, this.needModifyScheme)
-            }
-          }
-        })
+        // this.modifySchemeItem(this.schema, this.needModifyScheme)
       }
     },
     watch: {
