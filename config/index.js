@@ -4,8 +4,8 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../cwd/index.html'),
-    assetsRoot: path.resolve(__dirname, '../cwd'),
+    index: path.resolve(__dirname, `../disk/${process.env.VUE_APP_BRAND}/index.html`),
+    assetsRoot: path.resolve(__dirname,`../disk/${process.env.VUE_APP_BRAND}`),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
     productionSourceMap: false,
@@ -27,7 +27,16 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      // '/api': {
+      //   target: 'http://10.166.10.55:22201',//后端接口地址
+      //   changeOrigin: true,//是否允许跨越
+      //   pathRewrite: {
+      //     '^/api': '',//重写,
+      //   }
+      // }
+    },
+    // proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

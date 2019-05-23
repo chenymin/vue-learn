@@ -1,18 +1,19 @@
 <template>
-  <cover-container :is-touch-close='isTouchClose' ref='coverCom' v-model="isShowConfirmDialogue">
+  <cover-container :is-touch-close='isTouchClose' ref='coverConfirmDialog' v-model="isShowConfirmDialogue">
     <div class='content-container' slot='cover-slot' v-if="isShowConfirmDialogue">
       <div class='content'>
+      	<p class="title" v-if="showTitle">提示</p>
         <p class='text'>{{text}}</p>
         <slot name='btn-group'>
           <p class='btn-group'>
-            <button class='button-common cancle' @click.stop='cancleModal'>取消</button>
-            <button class='button-common confirm' @click.stop='confirm'>确定</button>
+            <button class='button-common cancle' @click.stop='cancleModal'>{{cancel}}</button>
+            <button class='button-common confirm' @click.stop='confirm'>{{sure}}</button>
           </p>
         </slot>
       </div>
     </div>
   </cover-container>
-  
+
 </template>
 
 <script>
@@ -29,6 +30,10 @@ export default {
       type: Boolean,
       default: false
     },
+    showTitle: {
+      type: Boolean,
+      default: false
+    },
     text: {
       type: String,
       default: '确定申请提前还款'
@@ -36,19 +41,26 @@ export default {
     isShow: {
       type: Boolean,
       default: false
+    },
+    sure: {
+      type: String,
+      default: '确定'
+    },
+    cancel: {
+      type: String,
+      default: '取消'
     }
   },
   methods: {
     confirm () {
-      this.eventBus.$emit('confirm/ok')
+      this.$emit('confirm-ok')
     },
     cancleModal () {
       this.isShowConfirmDialogue = false
-      this.eventBus.$emit('confirm/cancle')
+      this.$emit('confirm-cancle')
     },
     showCofirm  () {
       this.isShowConfirmDialogue = true
-      this.$refs.coverCom.showCover()
     }
   },
   components: {
@@ -86,14 +98,23 @@ export default {
     background-color: #fff;
     border-radius: 8px;
     margin-top: -1.25rem;
+    .title {
+    	text-align: center;
+    	font-size:0.3rem;
+			font-family:PingFangSC-Regular;
+			font-weight:400;
+			color:rgba(51,51,51,1);
+			line-height:0.42rem;
+			padding: 0.3rem 0 0;
+    }
     .text {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.3rem;
+      font-size: 0.2rem;
       color: #333;
-      text-align: center;
       height: 1.6rem;
+      padding: 0 0.5rem;
     }
     .btn-group {
       display: flex;

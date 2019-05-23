@@ -7,7 +7,7 @@
   box-sizing: border-box;
 }
 
-body, html, ol, ul, button, p{
+body, html, ol, ul, button, p, h1, h2, h3, h4, h5 {
   margin: 0;
   padding: 0;
 }
@@ -31,14 +31,27 @@ button, input, select,textarea{
   outline: none;
 }
 
+a {
+  color: #333;
+  text-decoration: none
+}
+
 input[type="submit"],input[type="reset"],input[type="button"] {
   -webkit-appearance: none;
+}
+
+input:disabled {
+  background-color: #fff; /*修改默认灰色样式*/
+  color: #333;
+  opacity: 1; /* 默认的不透明级别为0.3 */
+  -webkit-text-fill-color: #333; /* 字体颜色安卓与IOS适配 */
+  -webkit-opacity: 1; /*不透明级别安卓与IOS适配 */
 }
 
 .top {
   margin-top: 0.5rem!important;
 }
-
+// 改变input placeholder 的颜色
 ::-moz-placeholder {
   color: #ccc;
 }
@@ -49,15 +62,57 @@ input[type="submit"],input[type="reset"],input[type="button"] {
   color:#ccc;
 }
 
-.arrow-right {
+// 自定义箭头
+.customize-arrow {
   content: '';
   position: absolute;
-  right: 5px;
   width: 12px;
   height: 12px;
   border-bottom: solid 2px #ccc;
   border-right: solid 2px #ccc;
-  transform: rotate(-45deg);
   top: 50%;
   margin-top: -6px;
+}
+
+@mixin arrow-position ($value: 0.3rem, $position: right) {
+  #{$position}: $value;
+}
+
+.arrow-right {
+  @extend .customize-arrow;
+  @include arrow-position();
+  transform: rotate(-45deg);
+}
+
+.arrow-right_right-15 {
+  @include arrow-position(.15rem)
+}
+
+.arrow-left {
+  @extend .customize-arrow;
+  transform: rotate(135deg);
+}
+
+.arrow-top {
+  @extend .customize-arrow;
+  transform: rotate(-135deg);
+}
+
+.arrow-bottom {
+  @extend .customize-arrow;
+  transform: rotate(45deg);
+}
+
+.arrow-bottom_rigth-30 {
+  @include arrow-position(.3rem)
+}
+
+.arrow-bg-white {
+  border-bottom-color: #fff;
+  border-right-color: #fff;
+}
+
+.arrow-bg_black {
+  border-bottom-color: #666;
+  border-right-color: #666;
 }

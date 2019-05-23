@@ -1,68 +1,138 @@
 <template>
-    <div class="selection-container">
-      <div class="form-filed" @click="showSelect">
-        <label class="label">{{props.title}}</label>
-        <span class="select-com" :class="{'select-no-arrow': props.isNoArrow}">{{getDetaultVal()}}</span>
-      </div>
-      <cover-container :is-show='isShow'  ref='coverCom' v-on:cover-hidden='noticeClose'>
+    <div class="selection-component">
+      <my-input v-model="innerValue" v-if="isShowInput" v-bind="$attrs" @click.native.stop.prevent="showSelect">
+        <span slot="input-slot" class="arrow-right" v-if="isNoArrow"></span>
+      </my-input>
+      <cover-container :is-show='isShow' v-on:cover-hidden='noticeClose'>
         <transition-expand slot='cover-slot'>
           <div id="mySelect" class="select-wrap" v-if="isShow">
-            <p class="title">
+            <p class="title" v-if="isShowHeaderTitle">
               <span class="remove" @click="hiddenSelect"></span>
-              请选择{{props.title}}
+              请选择{{this.$attrs.label || ''}}
             </p>
-            <p class="area" v-if="props.selectType === 'area'">
+            <p class="area" v-if="selectType === 'area' && isShowHeaderTitle">
               <span class="choice">请选择</span>
-              <span class="province">{{selectVal}}</span>
+              <span class="province">{{this.$attrs.label || ''}}</span>
             </p>
             <ul class="list">
-              <li class="item" v-for="(item, index) in props.list" :key='index'
-                              :class="{'selected': (index === currentIndex) && props.selectType!=='area'}"
+              <li class="item" v-for="(item, index) in list" :key='index'
+                              :class="{'selected': (index === currentIndex) && selectType !== 'area'}"
+                              v-show="!item.delete"
                               @click="selectItem(item, index)">
                 {{getOptionLabel(item)}}
               </li>
+              <slot name="selection-bottom"></slot>
             </ul>
           </div>
         </transition-expand>
       </cover-container>
     </div>
-  
+
 </template>
 
 <script>
   import smartScrolls from '../utils/smartScroll'
   import TransitionExpand from './transition/transitionExpand'
   import CoverContainer from './base/cover'
+  import MyInput from '@/components/myinput.vue'
 
   export default {
+    $_veeValidate: {
+      name () {
+        return this.$attrs.label
+      },
+      value () {
+        return this.value
+      }
+    },
     data () {
       return {
+        innerValue: '',
         currentIndex: this.getDefaultIndex(),
-        isShow: this.props.isShowSelect || false,
+        isShow: this.isShowSelect || false,
         selectVal: this.getDetaultVal()
       }
     },
-    props: ['props', 'model'],
+    props: {
+      list: {
+        type: Array,
+        default () {
+          return []
+        }
+      },
+      objKey: {
+        type: String,
+        default: 'label'
+      },
+      objValue: {
+        type: String,
+        default: 'value'
+      },
+      value: {
+        type: null
+      },
+      title: {
+        type: String,
+        default: ''
+      },
+      isNoArrow: {
+        type: Boolean,
+        default: true
+      },
+      isShowSelect: {
+        type: Boolean,
+        default: false
+      },
+      selectType: {
+        type: String,
+        default: ''
+      },
+      isTriggerClick: {
+        type: Boolean,
+        default: true
+      },
+      isNeedValue: {
+        type: Boolean,
+        default: true
+      },
+      isShowHeaderTitle: {
+        type: Boolean,
+        default: true
+      },
+      isShowInput: {
+        type: Boolean,
+        default: true
+      }
+    },
+    watch: {
+      // Handles external model changes.
+      value (newVal) {
+        this.watchCommon(newVal)
+      },
+      list (newVal) {
+        this.currentIndex = this.getDefaultIndex()
+      }
+    },
     methods: {
       noticeClose () {
         this.hiddenSelect()
       },
       getDetaultVal () {
-        const item = this.props.list[this.currentIndex]
-        return this.currentIndex === -1 ? this.props.defaultVal : this.getOptionLabel(item)
+        const item = this.list[this.currentIndex]
+        return this.currentIndex === -1 ? this.value : this.getOptionLabel(item)
       },
       getOptionValue (option) {
         if (typeof option === 'object') {
-          if (this.props.value && option[this.props.value]) {
-            return option[this.props.value]
+          if (this.objValue && option[this.objValue]) {
+            return option[this.objValue]
           }
         }
         return option
       },
       getOptionLabel (option) {
         if (typeof option === 'object') {
-          if (this.props.value && option[this.props.label]) {
-            return option[this.props.label]
+          if (this.objKey && option[this.objKey]) {
+            return option[this.objKey]
           }
         }
         return option
@@ -75,7 +145,7 @@
         })
       },
       showSelect () {
-        if (!this.props.isTriggerClick) {
+        if (!this.isTriggerClick) {
           this.isShow = false
           return
         }
@@ -90,20 +160,19 @@
         this.currentIndex = index
         this.isShow = false
         this.selectVal = this.getOptionLabel(item)
-
-        const val = this.props.isNeedValue ? this.getOptionValue(item) : this.getOptionLabel(item)
-        this.$emit('mySelect', {[this.model]: val})
-        this.$store.commit('changeApplyEdit', {[this.model]: val})
+        const val = this.isNeedValue ? this.getOptionValue(item) : this.selectVal
+        this.innerValue = this.getOptionLabel(item)
+        this.$emit('input', val)
       },
       getDefaultIndex () {
         let defaultIndex = -1
-        if (typeof this.props.defaultVal === 'number') {
-          defaultIndex = this.props.defaultVal - 1
+        if (typeof this.value === 'number') {
+          defaultIndex = this.value - 1
         } else {
-          for (let i = 0, len = this.props.list.length; i < len; i++) {
-            const label = this.props.list[i][this.props.label]
-            const value = this.props.list[i][this.props.value]
-            if (label === this.props.defaultVal || value === this.props.defaultVal) {
+          for (let i = 0, len = this.list.length; i < len; i++) {
+            const label = this.list[i][this.objKey]
+            const value = this.list[i][this.objValue]
+            if (label === this.value || value === this.value) {
               defaultIndex = i
               break
             } else {
@@ -113,110 +182,30 @@
         }
         return defaultIndex
       },
-      validSelect () {
-        if (this.props.validOff) {
-          this.$store.commit('getValidatorMsg', {[this.model]: {msg: '', isValid: true}})
-          return
-        }
-        const msg = this.currentIndex === -1 ? `请选择${this.props.title}` : ''
-        const isValid = this.currentIndex === -1 ? 0 : 1
-        this.$store.commit('getValidatorMsg', {[this.model]: {msg, isValid}})
-      },
-      commitValue () {
-        const item = this.props.list[this.currentIndex]
-        const val = this.props.isNeedValue ? this.getOptionValue(item) : this.getOptionLabel(item)
-        this.$store.commit('changeApplyEdit', {[this.model]: val})
-      },
-      watchValue (val) {
+      watchCommon (newVal) {
         this.currentIndex = this.getDefaultIndex()
-        this.selectVal = this.currentIndex === -1 ? this.props.defaultVal : this.getDetaultVal()
-
-        this.commitValue()
-      },
-      watchValid () {
-        this.validSelect()
-      },
-      watchList () {
-        this.currentIndex = this.getDefaultIndex()
-      }
-    },
-    watch: {
-      currentIndex () {
-        this.validSelect()
-        this.commitValue()
+        this.selectVal = this.currentIndex === -1 ? newVal : this.getDetaultVal()
+        this.innerValue = this.selectVal
       }
     },
     components: {
       TransitionExpand,
-      CoverContainer
+      CoverContainer,
+      MyInput
     },
     mounted () {
-      this.$watch('props.defaultVal', this.watchValue)
-      this.$watch('props.validOff', this.watchValid)
-      this.$watch('props.list', this.watchList)
-      if (this.currentIndex !== -1) {
-        this.commitValue()
-      }
-      setTimeout(() => {
-        this.validSelect()
-      }, 0)
+      this.watchCommon(this.value)
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .selection-container {
-    .form-filed {
-      position: relative;
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      height: 1rem;
-      padding: 0 0.3rem;
-      .label {
-        font-size: 0.32rem;
-      }
-      .select-com {
-        display: flex;
-        flex: 1;
-        justify-content: flex-end;
-        font-size: 0.32rem;
-        color: #444;
-        margin-right: 0.3rem;
-        &::after {
-           content: '';
-           position: absolute;
-           right: 5px;
-           width: 12px;
-           height: 12px;
-           border-bottom: solid 2px #ccc;
-           border-right: solid 2px #ccc;
-           transform: rotate(-45deg);
-           top: 50%;
-           margin-top: -6px;
-           right: 0.3rem;
-         }
-      }
-      .select-no-arrow {
-        margin-right: 0; 
-        &::after {
-          display: none;
-        }
-      }
-    }
-    .cover-container {
-      position: absolute;
-      top:0;
-      width: 100%;
-      height: 100%;
-      background-color: #333;
-      opacity: 0.8;
-      z-index: 10
-    }
+  .selection-component {
     .select-wrap {
       position: fixed;
       width: 100%;
       bottom: 0;
+      left: 0;
       background-color: #fff;
       z-index: 11;
       .common {

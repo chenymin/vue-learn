@@ -28,8 +28,8 @@
       }
     },
     watch: {
-      'isShow' (newVal, oldVal) {
-        this.isShowCover = this.isShow
+      'isShow' (newVal) {
+        this.isShowCover = newVal
       }
     },
     methods: {

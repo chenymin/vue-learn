@@ -1,73 +1,104 @@
 <template>
-  <div class="area-container">
-    <div class="cover" @click.prevent="hiddenArea" v-if="isShow"></div>
-    <div class="form-filed" @click="showSelect">
-      <label class="label">{{areaLabel}}</label>
-      <input class="select-com" :value="detailAddress" readonly='readonly'/>
-      <span class="arrow-right"></span>
-    </div>
-    <div :class="wrapper" v-if="isShow">
-      <template v-if="type != 'mobile'">
-        <select @change="getCities" v-model="currentProvince">
-          <option :value="placeholders.province">{{ placeholders.province }}</option>
-          <option v-for="(item, index) in provinces" :value="item" :key="index">{{ item }}</option>
-        </select>
-        <template v-if="!onlyProvince">
-          <select @change="getAreas" v-model="currentCity">
-            <option :value="placeholders.city">{{ placeholders.city }}</option>
-            <option v-for="(item, index) in cities" :value="item" :key='index'>{{ item }}</option>
-          </select>
-          <select v-if="!hideArea" v-model="currentArea">
-            <option :value="placeholders.area">{{ placeholders.area }}</option>
-            <option v-for="(item, index) in areas " :value="item" :key='index'>{{ item }}</option>
-          </select>
-        </template>
-      </template>
-      <template v-else>
-        <div :class="addressHeader">
-          <span class="remove" @click.prevent="hiddenArea"></span>
-          <ul>
-            <li :class="{'active': tab == 1}" @click="resetProvince">{{ currentProvince && !staticPlaceholder ? currentProvince : placeholders.province }}</li>
+  <div class="distpicker-component">
+    <my-input v-model="innerValue" v-bind="$attrs" @click.native.stop.prevent="showSelect">
+      <span slot="input-slot" class="arrow-right" v-if="isNoArrow"></span>
+    </my-input>
+    <cover-container :is-show='isShow' v-on:cover-hidden='noticeClose'>
+      <transition-expand slot='cover-slot'>
+        <div :class="wrapper" v-if="isShow">
+          <template>
+          <div :class="addressHeader">
+            <span class="remove" @click.prevent="hiddenArea"></span>
+            <ul>
+              <li :class="{'active': tab == 1}" @click="resetProvince">{{ currentProvince && !staticPlaceholder ? currentProvince : placeholders.province }}</li>
+              <template v-if="!onlyProvince">
+                <li v-if="showCityTab" :class="{'active': tab == 2}" @click="resetCity">{{  currentCity && !staticPlaceholder ? currentCity : placeholders.city }}</li>
+                <li v-if="showAreaTab && !hideArea" :class="{'active': tab == 3}">{{ currentArea && !staticPlaceholder ? currentArea : placeholders.area }}</li>
+              </template>
+            </ul>
+          </div>
+          <div :class="addressContainer">
+            <ul class="list" v-if="tab == 1">
+              <li v-for="(item, index) in provinces" :key="index" :class="{'active': item == currentProvince}" @click="chooseProvince(item)">{{ item }}</li>
+            </ul>
             <template v-if="!onlyProvince">
-              <li v-if="showCityTab" :class="{'active': tab == 2}" @click="resetCity">{{  currentCity && !staticPlaceholder ? currentCity : placeholders.city }}</li>
-              <li v-if="showAreaTab && !hideArea" :class="{'active': tab == 3}">{{ currentArea && !staticPlaceholder ? currentArea : placeholders.area }}</li>
+              <ul class="list" v-if="tab == 2">
+                <li v-for="(item, index) in cities" :key="index" :class="{'active': item == currentCity}" @click="chooseCity(item)">{{ item }}</li>
+              </ul>
+              <ul class="list" v-if="tab == 3 && !hideArea">
+                <li v-for="(item, index) in areas" :key="index" :class="{'active': item == currentArea}" @click="chooseArea(item)">{{ item }}</li>
+              </ul>
             </template>
-          </ul>
+          </div>
+        </template>
         </div>
-        <div :class="addressContainer">
-          <ul class="list" v-if="tab == 1">
-            <li v-for="(item, index) in provinces" :key="index" :class="{'active': item == currentProvince}" @click="chooseProvince(item)">{{ item }}</li>
-          </ul>
-          <template v-if="!onlyProvince">
-            <ul class="list" v-if="tab == 2">
-              <li v-for="(item, index) in cities" :key="index" :class="{'active': item == currentCity}" @click="chooseCity(item)">{{ item }}</li>
-            </ul>
-            <ul class="list" v-if="tab == 3 && !hideArea">
-              <li v-for="(item, index) in areas" :key="index" :class="{'active': item == currentArea}" @click="chooseArea(item)">{{ item }}</li>
-            </ul>
-          </template>
-        </div>
-      </template>
-    </div>
+      </transition-expand>
+    </cover-container>
   </div>
 </template>
 
 <script>
 import DISTRICTS from './districts'
-import smartScrolls from '../../utils/smartScroll'
+import smartScrolls from '@/utils/smartScroll'
+import TransitionExpand from '@/components/transition/transitionExpand'
+import CoverContainer from '@/components/base/cover'
+import MyInput from '@/components/myinput.vue'
 
 const DEFAULT_CODE = '000000'
 
 export default {
   name: 'v-distpicker',
+  $_veeValidate: {
+    name () {
+      return this.$attrs.label
+    },
+    value () {
+      return this.value
+    }
+  },
+  data () {
+    return {
+      innerValue: '',
+      tab: 1,
+      showCityTab: false,
+      showAreaTab: false,
+      provinces: [],
+      cities: [],
+      areas: [],
+      currentProvince: '',
+      currentCity: '',
+      currentArea: '',
+      isShow: false
+    }
+  },
   props: {
-    province: { type: [String, Number], default: '' },
-    city: { type: [String, Number], default: '' },
-    area: { type: [String, Number], default: '' },
-    type: { type: String, default: 'mobile' },
-    hideArea: { type: Boolean, default: false },
-    onlyProvince: { type: Boolean, default: false },
-    staticPlaceholder: { type: Boolean, default: false },
+    isTriggerClick: {
+      type: Boolean,
+      default: true
+    },
+    value: {
+      type: null
+    },
+    type: {
+      type: String,
+      default: 'mobile'
+    },
+    hideArea: {
+      type: Boolean,
+      default: false
+    },
+    onlyProvince: {
+      type: Boolean,
+      default: false
+    },
+    staticPlaceholder: {
+      type: Boolean,
+      default: false
+    },
+    isNoArrow: {
+      type: Boolean,
+      default: true
+    },
     placeholders: {
       type: Object,
       default () {
@@ -78,92 +109,41 @@ export default {
         }
       }
     },
-    wrapper: { type: String, default: 'address' },
-    addressHeader: { type: String, default: 'address-header' },
-    addressContainer: { type: String, default: 'address-container' },
+    wrapper: {
+      type: String,
+      default: 'address'
+    },
+    addressHeader: {
+      type: String,
+      default: 'address-header'
+    },
+    addressContainer: {
+      type: String,
+      default: 'address-container'
+    },
     areaLabel: {
       type: String,
       default: '所在省份'
     },
-    'props': '',
-    'model': ''
-  },
-  data () {
-    return {
-      tab: 1,
-      showCityTab: false,
-      showAreaTab: false,
-      provinces: [],
-      cities: [],
-      areas: [],
-      currentProvince: this.determineType(this.province) || this.placeholders.province,
-      currentCity: this.determineType(this.city) || this.placeholders.city,
-      currentArea: this.determineType(this.area) || this.placeholders.area,
-      isShow: false
-    }
-  },
-  mounted () {
-    if (this.type !== 'mobile') {
-      this.provinces = this.props.isAll ? this.getDistricts() : this.props.needDist
-      this.cities = this.province ? this.getDistricts(this.getAreaCode(this.determineType(this.province))) : []
-      this.areas = this.city ? this.getDistricts(this.getAreaCode(this.determineType(this.city))) : []
-    } else {
-      if (this.area && !this.hideArea && !this.onlyProvince) {
-        this.tab = 3
-        this.showCityTab = true
-        this.showAreaTab = true
-        this.areas = this.getDistricts(this.getAreaCode(this.determineType(this.city)))
-      } else if (this.city && this.hideArea && !this.onlyProvince) {
-        this.tab = 2
-        this.showCityTab = true
-        this.cities = this.getDistricts(this.getAreaCode(this.determineType(this.province)))
-      } else {
-        this.provinces = this.props.isAll ? this.getDistricts() : this.props.needDist
+    isAll: {
+      type: Boolean,
+      default: true
+    },
+    isNeedValue: {
+      type: Boolean,
+      default: true
+    },
+    // 可选部分省分城市，如北京、上海
+    needDist: {
+      type: Object,
+      default () {
+        return {}
       }
     }
-    this.$watch('props.validOff', this.watchValid)
-    if (this.detailAddress.indexOf('请选择') < 0) {
-      const provinceValue = /^[\u4e00-\u9fa5]{0,}$/.test(this.province) ? this.province : this.getCodeValue(this.province)
-      const cityCalue = /^[\u4e00-\u9fa5]{0,}$/.test(this.city) ? this.city : this.getCodeValue(this.city)
-      const areaValue = /^[\u4e00-\u9fa5]{0,}$/.test(this.area) ? this.area : this.getCodeValue(this.area)
-
-      this.currentProvince = provinceValue || this.placeholders.province
-      this.currentCity = cityCalue || this.placeholders.city
-      this.currentArea = areaValue || this.placeholders.area
-
-      this.applyEditInfo()
-    }
-    this.emitValidate()
   },
   watch: {
-    currentProvince (vaule) {
-      this.$emit('province', this.setData(vaule))
-      if (this.onlyProvince) this.emit('selected')
-      this.reset()
-    },
-    currentCity (value) {
-      this.$emit('city', this.setData(value, this.currentProvince))
-      if (value !== this.placeholders.city && this.hideArea) this.emit('selected')
-      this.reset()
-    },
-    currentArea (value) {
-      this.$emit('area', this.setData(value, this.currentCity))
-      if (value !== this.placeholders.area) this.emit('selected')
-      this.reset()
-    },
-    province (value) {
-      const provinceValue = /^[\u4e00-\u9fa5]{0,}$/.test(this.province) ? this.province : this.getCodeValue(this.province)
-      this.currentProvince = provinceValue || this.placeholders.province
-      this.cities = this.determineValue(this.currentProvince, this.placeholders.province)
-    },
-    city (value) {
-      const cityCalue = /^[\u4e00-\u9fa5]{0,}$/.test(this.city) ? this.city : this.getCodeValue(this.city)
-      this.currentCity = cityCalue || this.placeholders.city
-      this.areas = this.determineValue(this.currentCity, this.placeholders.city, this.currentProvince)
-    },
-    area (value) {
-      const areaValue = /^[\u4e00-\u9fa5]{0,}$/.test(this.area) ? this.area : this.getCodeValue(this.area)
-      this.currentArea = areaValue || this.placeholders.area
+    value (newVal, oldVal) {
+      !oldVal && this.watchCommon(newVal)
     }
   },
   computed: {
@@ -175,50 +155,44 @@ export default {
     }
   },
   methods: {
-    setData (value, check = '') {
-      return {
-        code: this.getAreaCode(value, check),
-        value: value
+    watchCommon (newVal) {
+      const detailAddressArr = newVal && newVal.indexOf('-') >= 0 && newVal.split('-')
+      if (!detailAddressArr) {
+        return
       }
+      this.currentProvince = /^[\u4e00-\u9fa5]{0,}$/.test(detailAddressArr[0]) ? detailAddressArr[0] : this.provinces[detailAddressArr[0]]
+      this.cities = DISTRICTS[this.getKeyByObjectValue(this.provinces, this.currentProvince)]
+
+      this.currentCity = /^[\u4e00-\u9fa5]{0,}$/.test(detailAddressArr[1]) ? detailAddressArr[1] : this.cities[detailAddressArr[1]]
+      this.areas = DISTRICTS[this.getKeyByObjectValue(this.cities, this.currentCity)]
+
+      this.currentArea = /^[\u4e00-\u9fa5]{0,}$/.test(detailAddressArr[2]) ? detailAddressArr[2] : this.areas[detailAddressArr[2]]
+      this.innerValue = `${this.currentProvince}-${this.currentCity}-${this.currentArea}`
     },
-    emit (name) {
-      let data = {
-        province: this.setData(this.currentProvince)
-      }
-
-      if (!this.onlyProvince) {
-        this.$set(data, 'city', this.setData(this.currentCity))
-      }
-
-      if (!this.onlyProvince || this.hideArea) {
-        this.$set(data, 'area', this.setData(this.currentArea))
-      }
-
-      this.$emit(name, data)
+    noticeClose () {
+      this.hiddenArea()
     },
     getCities () {
       this.currentCity = this.placeholders.city
       this.currentArea = this.placeholders.area
-      this.cities = this.determineValue(this.currentProvince, this.placeholders.province)
+      this.cities = DISTRICTS[this.getKeyByObjectValue(this.provinces, this.currentProvince)]
       this.cleanList('areas')
       if (this.cities == null) {
-        this.emit('selected')
         this.tab = 1
         this.showCityTab = false
       }
     },
     getAreas () {
       this.currentArea = this.placeholders.area
-      this.areas = this.determineValue(this.currentCity, this.placeholders.city, this.currentProvince)
+      this.areas = DISTRICTS[this.getKeyByObjectValue(this.cities, this.currentCity)]
       if (this.areas == null) {
-        this.emit('selected')
         this.tab = 2
         this.showAreaTab = false
       }
     },
     resetProvince () {
       this.tab = 1
-      this.provinces = this.props.isAll ? this.getDistricts() : this.props.needDist
+      this.provinces = this.isAll ? this.getDistricts() : this.needDist
       this.showCityTab = false
       this.showAreaTab = false
     },
@@ -235,8 +209,6 @@ export default {
       this.showCityTab = true
       this.showAreaTab = false
       this.getCities()
-      this.$emit('myDistPicker', {[this.model]: this.detailAddress})
-      this.reset()
     },
     chooseCity (name) {
       this.currentCity = name
@@ -245,61 +217,29 @@ export default {
       this.showCityTab = true
       this.showAreaTab = true
       this.getAreas()
-      this.$emit('myDistPicker', {[this.model]: this.detailAddress})
-      this.reset()
     },
     chooseArea (name) {
       this.currentArea = name
-      this.$emit('myDistPicker', {[this.model]: this.detailAddress})
-      this.reset()
+
+      const currentProvinceCode = this.getKeyByObjectValue(this.provinces, this.currentProvince)
+      const currentCityCode = this.getKeyByObjectValue(this.cities, this.currentCity)
+      const currentAreaCode = this.getKeyByObjectValue(this.areas, this.currentArea)
+      const addressDetailCode = this.isNeedValue ? `${currentProvinceCode}-${currentCityCode}-${currentAreaCode}` : this.detailAddress
+
+      this.innerValue = `${this.currentProvince}-${this.currentCity}-${this.currentArea}`
+      this.$emit('input', addressDetailCode)
       this.hiddenArea()
-    },
-    getAreaCode (name, check = '') {
-      for (var x in DISTRICTS) {
-        for (var y in DISTRICTS[x]) {
-          if (name === DISTRICTS[x][y]) {
-            if (check.length > 0) {
-              if (y.slice(0, 2) !== this.getAreaCode(check).slice(0, 2)) {
-                continue
-              } else {
-                return y
-              }
-            } else {
-              return y
-            }
-          }
-        }
-      }
-    },
-    getCodeValue (code) {
-      for (var x in DISTRICTS) {
-        for (var y in DISTRICTS[x]) {
-          if (code === y) {
-            return DISTRICTS[x][y]
-          }
-        }
-      }
     },
     getDistricts (code = DEFAULT_CODE) {
       return DISTRICTS[code] || null
-    },
-    determineValue (currentValue, placeholderValue, check = '') {
-      if (currentValue === placeholderValue) {
-        return []
-      } else {
-        return this.getDistricts(this.getAreaCode(currentValue, check))
-      }
-    },
-    determineType (value) {
-      if (typeof value === 'number') {
-        return this.getCodeValue(value)
-      }
-      return value
     },
     cleanList (name) {
       this[name] = []
     },
     showSelect () {
+      if (!this.isTriggerClick) {
+        return
+      }
       $('html').addClass('noscroll')
       Array.from($('.area-container')).forEach((item) => {
         smartScrolls($(item), '.list')
@@ -310,82 +250,32 @@ export default {
       $('html').removeClass('noscroll')
       this.isShow = false
     },
-    emitValidate () {
-      if (this.props.validOff) {
-        this.$store.commit('getValidatorMsg', {[this.model]: {msg: '', isValid: true}})
-        return
-      }
-      const msg = this.currentProvince === '省' || this.currentArea === '区' ? '请选择居住地址' : ''
-      const isValid = this.currentProvince === '省' || this.currentArea === '区' ? 0 : 1
-      this.$store.commit('getValidatorMsg', {[this.model]: {msg, isValid}})
-    },
-    reset () {
-      this.applyEditInfo()
-      this.emitValidate()
-    },
-    applyEditInfo () {
-      const proviceCode = this.getAreaCode(this.determineType(this.currentProvince))
-      const cityCode = this.getAreaCode(this.determineType(this.currentCity))
-      const areaCode = this.getAreaCode(this.determineType(this.currentArea))
-      const applyEditValue = this.props.isNeedValue ? `${proviceCode}-${cityCode}-${areaCode}` : this.detailAddress
-      this.$store.commit('changeApplyEdit', {[this.model]: applyEditValue})
-    },
-    watchValid (val) {
-      this.emitValidate()
+    /**
+     *  根据对象的value值获取key，如{110000: '北京市', 120000: '天津市'}, name: 北京市---> 110000
+     *  @param object {Object}
+     *  @param name {String}
+     *  @return {String}
+     */
+    getKeyByObjectValue (object, name) {
+      return Object.entries(object).filter((item) => item.includes(name))[0][0]
     }
+  },
+  components: {
+    TransitionExpand,
+    CoverContainer,
+    MyInput
+  },
+  mounted () {
+    this.provinces = this.isAll ? this.getDistricts() : this.needDist
+    this.watchCommon(this.value)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .form-filed {
-      position: relative;
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      height: 1rem;
-      padding: 0 0.3rem;
-      .select-com {
-        display: flex;
-        flex: 1;
-        font-size: 0.32rem;
-        color: #444;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .arrow-right {
-        content: '';
-        position: absolute;
-        right: 5px;
-        width: 12px;
-        height: 12px;
-        border-bottom: solid 2px #ccc;
-        border-right: solid 2px #ccc;
-        transform: rotate(-45deg);
-        top: 50%;
-        margin-top: -6px;
-        right: 0.3rem;
-      }
-      .select-no-arrow {
-        margin-right: 0; 
-        &::after {
-          display: none;
-        }
-      }
-    }
-  .area-container {
+  .distpicker-component {
     font-size: 0.36rem;
     color: #444;
-    .cover {
-      position: absolute;
-      top:0;
-      width: 100%;
-      height: 100%;
-      background-color: #333;
-      opacity: 0.8;
-      z-index: 10
-    }
   }
   .address {
     color: #444;
@@ -416,40 +306,6 @@ export default {
       transform: rotate(45deg);
     }
   }
-  select {
-    padding: .5rem .75rem;
-    height: 40px;
-    font-size: 1rem;
-    line-height: 1.25;
-    color: #464a4c;
-    background-color: #fff;
-    background-image: none;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
-
-    option {
-      font-weight: normal;
-      display: block;
-      white-space: pre;
-      min-height: 1.2em;
-      padding: 0px 2px 1px;
-    }
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-
-    li {
-      list-style: none;
-    }
-  }
   .address-header {
     background-color: #fff;
     ul {
@@ -471,7 +327,7 @@ export default {
           padding-left: 0.65rem
         }
       }
-      
+
     }
   }
   .address-container {

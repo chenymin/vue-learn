@@ -1,9 +1,16 @@
 <template>
-  <div class="header-wrap">
+  <div class="header-component">
     <header class="header">
-      <span class="left-arrow" @click="reboundPage" v-if="isArrow"></span>
+      <slot name="left-slot">
+        <p v-if="isArrow" @click="reboundPage" class="header-component__arrow-area">
+          <span class="left-arrow"></span>
+          <span class="header-component__rebound-text">返回</span>
+        </p>
+      </slot>
       <span class="title" :class="{'title-middle': isMiddle, 'title-left': !isMiddle}">{{title}}</span>
-      <span class="right-title" @click="jumpOtherPage" v-if="rightTitle !== ''">{{rightTitle}}</span>
+      <slot name="right-slot">
+        <span class="right-title" @click="jumpOtherPage" v-if="rightTitle !== ''">{{rightTitle}}</span>
+      </slot>
     </header>
     <p class="space"></p>
   </div>
@@ -28,14 +35,27 @@
         type: String,
         default: ''
       },
-      isClose: {
+      isByClickReturn: {
         type: Boolean,
         default: false
+      },
+      url: {
+        type: String,
+        default: ''
       }
     },
     methods: {
       reboundPage () {
-        this.$router.go(-1)
+        // 点击返回按钮处理页面的逻辑
+        if (this.isByClickReturn) {
+          this.$emit('header-back')
+          return
+        }
+        if (this.url === '') {
+          this.$router.go(-1)
+          return
+        }
+        this.$router.replace({name: this.url})
       },
       jumpOtherPage () {
         this.$emit('header-right-space')
@@ -45,6 +65,25 @@
 </script>
 
 <style lang="scss" scoped>
+  .header-component {
+    &__rebound-text {
+       position: absolute;
+       display: flex;
+       align-items: center;
+       width: 1rem;
+       height: 1rem;
+       left: .8rem;
+       top: 0
+    }
+    &__arrow-area {
+      position: relative;
+      height: 100%;
+    }
+    &__rebound-text{
+      font-size: .3rem;
+      color: #333;
+    }
+  }
   .header {
     display: flex;
     height: 1rem;
@@ -62,13 +101,13 @@
       &::before {
         position: absolute;
         content: '';
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
         border-bottom: solid 1px #333;
         border-left: solid 1px #333;
         transform: rotate(45deg);
         top: 50%;
-        margin-top: -8px;
+        margin-top: -6px;
         left: 50%;
       }
     }

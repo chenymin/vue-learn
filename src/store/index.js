@@ -4,8 +4,8 @@ import * as actions from './actions'
 import * as mutations from './mutations'
 import * as getters from './getters'
 import global from './modules/global'
-import carLoanApply from './modules/carLoanApply'
-import user from './modules/user'
+import loanApply from './modules/loanApply'
+import loanCenter from './modules/loanCenter'
 
 Vue.use(Vuex)
 
@@ -17,8 +17,8 @@ export default new Vuex.Store({
   mutations,
   modules: {
     global,
-    carLoanApply,
-    user
+    loanApply,
+    loanCenter
   },
   strict: debug
 })

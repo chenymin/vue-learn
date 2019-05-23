@@ -1,13 +1,13 @@
 <template>
-  <cover-container :is-touch-close='isTouchClose' ref='coverCom' v-model="isPromptAlertShow">
+  <cover-container :is-touch-close='isTouchClose' v-model="isPromptAlertShow">
     <div class="prompt-alert" slot='cover-slot' v-if="isPromptAlertShow">
       <div class="alert-content">
-        <span class="title">{{showTitle}}</span>
+        <span class="title" v-if="isShowTitle">{{showTitle}}</span>
         <slot name="prompt-content">
           <p class="content-text">{{content}}</p>
         </slot>
         <slot name="prompt-btn">
-          <button class="confirm-btn" @click="cancel">我知道了</button>
+          <button class="confirm-btn" @click.prevent="cancel">我知道了</button>
         </slot>
       </div>
     </div>
@@ -35,6 +35,10 @@
         type: String,
         default: '提示'
       },
+      isShowTitle: {
+        type: Boolean,
+        default: true
+      },
       isTouchClose: {
         type: Boolean,
         default: false
@@ -51,10 +55,18 @@
       },
       promptAlertShow () {
         this.isPromptAlertShow = true
-        this.$refs.coverCom.showCover()
+        this.$emit('prompt-cancel', true)
       },
       promptAlertHidden () {
         this.isPromptAlertShow = false
+      }
+    },
+    watch: {
+      'isShow' (newVal) {
+        this.isPromptAlertShow = newVal
+      },
+      isPromptAlertShow (newVal) {
+        this.$emit('prompt-cancel', newVal)
       }
     },
     components: {
@@ -88,7 +100,6 @@
       display: flex;
       justify-content: center;
       padding-top: 0.4rem;
-      padding-bottom: 0.2rem;
       color: #333;
     }
     .alert-content {
@@ -103,8 +114,8 @@
     }
     .content-text {
       text-align: center;
-      padding-bottom: 0.4rem;
-      color: #999;
+      padding: .3rem;
+      color: #333333;
       font-size: .3rem
     }
     .confirm-btn {

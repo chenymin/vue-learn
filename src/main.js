@@ -1,16 +1,19 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
-import router from './router'
-import store from './store'
-import * as filters from './utils/filters'
-import eventBus from './utils/eventBus'
-import './components/base/pass'
-import './utils/_polyfill'
+import App from '@/App'
+import router from '@/router'
+import store from '@/store'
+import '@/utils/_polyfill'
+import * as filters from '@/utils/filters'
+import eventBus from '@/utils/eventBus'
 import VeeValidate, {Validator} from 'vee-validate'
-import dictionary from './utils/validatorConfig'
+import dictionary from '@/utils/validatorConfig'
 import zh from 'vee-validate/dist/locale/zh_CN'
+
+// 有赞vant组件
+import { DatetimePicker } from 'vant'
+Vue.use(DatetimePicker)
 
 // 修改默认错误提示
 const config = {

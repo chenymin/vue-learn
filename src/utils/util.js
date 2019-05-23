@@ -7,7 +7,7 @@ const IDValidator = require('id-validator')
  */
 export const validMobile = (mobile) => {
   mobile = mobile && mobile.replace(/\D/g, '')
-  return mobile.length === 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(mobile)
+  return mobile.length === 11 && /^((13|14|15|17|18|19)[0-9]{1}\d{8})$/.test(mobile)
 }
 
 /**
@@ -98,23 +98,21 @@ export const floorNum = (val) => {
   return _.floor(val)
 }
 
-export const formValid = (validatorMsg) => {
-  let validResult = {msg: '', isValid: true}
-  _.some(validatorMsg, ({msg, isValid}) => {
-    if (!isValid) {
-      _.assign(validResult, {msg, isValid})
-      return true
-    }
-  })
-  return validResult
-}
-
 /**
  * 判断是否是微信打开的页面
  */
 export const isWeixin = () => {
   var ua = navigator.userAgent.toLowerCase()
   return /micromessenger/.test(ua)
+}
+
+/**
+ * 判断是否设备是Android
+ */
+export const isAndroid = () => {
+  var u = navigator.userAgent
+  var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1  // android终端
+  return isAndroid
 }
 
 /**
@@ -159,11 +157,41 @@ export const getUrl = () => {
   return url
 }
 
+/**
+ * 修改pageInfo信息
+ * @param pageInfo {Object}
+ * @param modifyPageInfo {Object}
+ * @return {Object}
+ */
+export const mergeInfo = (pageInfo, modifyPageInfo = {}) => {
+  if (_.isEmpty(modifyPageInfo)) {
+    return pageInfo
+  }
+  Object.keys(modifyPageInfo).forEach((key) => {
+    if (_.isPlainObject(modifyPageInfo[key])) {
+      _.merge(!pageInfo[key] ? pageInfo[key] = {} : pageInfo[key], modifyPageInfo[key])
+    } else if (_.isArray(modifyPageInfo[key])) {
+      if (!pageInfo[key]) {
+        pageInfo[key] = [...modifyPageInfo[key]]
+        return
+      }
+      modifyPageInfo[key].forEach((item) => {
+        const index = _.findIndex(pageInfo[key], (o) => o.model === item.model)
+        index >= 0 ? _.merge(pageInfo[key][index], item) : pageInfo[key] = _.unionBy([...pageInfo[key], ...modifyPageInfo[key]], 'model')
+      })
+    } else {
+      pageInfo[key] = modifyPageInfo[key]
+    }
+  })
+  return pageInfo
+}
+
 // 格式化的代码请写在这里
 
 /**
  * 手机格式化13088889999-> 130 8888 9999
  * @param mobile 手机号
+ * @return Boolean
  */
 export const formatPhone = (mobile) => {
   return mobile && mobile.replace(/\B(?=(?:\d{4})+$)/g, ' ')
@@ -172,6 +200,7 @@ export const formatPhone = (mobile) => {
 /**
  * 手机格式化限制长度13088889999-> 130 8888 9999
  * @param value 手机号
+ * @return String
  */
 export const formatMobileLimit = (value) => {
   value = value.replace(/\D/g, '')
@@ -187,6 +216,7 @@ export const formatMobileLimit = (value) => {
 /**
  * 银行卡号格式化限制长度 6444 1213 2123 1234 1212
  * @param value 银行卡号
+ * @return String
  */
 export const formatBankCardLimit = (value) => {
   value = value.replace(/\D/g, '')
@@ -202,6 +232,7 @@ export const formatBankCardLimit = (value) => {
 /**
  * 银行卡号格式化 6444 1213 2123 1234 1212
  * @param val 银行卡号
+ * @return String
  */
 export const formatBankNum = (val) => {
   return val && val.replace(/\B(?=(?:\d{4})+$)/g, ' ')
@@ -210,6 +241,7 @@ export const formatBankNum = (val) => {
 /**
  * 姓名格式化 复星星---->**星
  * @param val 姓名
+ * @return String
  */
 export const formatName = (val) => {
   if (!val) {
@@ -221,6 +253,7 @@ export const formatName = (val) => {
 /**
  * 身份证格式化 4334343434344343434343---->*****************3
  * @param val 身份证号
+ * @return String
  */
 export const formatIdCard = (val) => {
   if (!val) {
@@ -232,6 +265,7 @@ export const formatIdCard = (val) => {
 /**
  * 手机脱敏处理 15023456789 --> 150****6789
  * @param val 手机号
+ * @return String
  */
 export const formatMobileStart = (val) => {
   if (!val) {
@@ -243,10 +277,25 @@ export const formatMobileStart = (val) => {
 /**
  * 银行卡号 6212262201023557228---->**************7228
  * @param val 银行卡号
+ * @return String
  */
 export const formatBankCardStart = (val) => {
   if (!val) {
     return ''
   }
   return `**************${val.substring(val.length - 4, val.length)}`
+}
+
+/**
+* 比较当前日期的大小
+* @param dataVal
+* @return Boolean
+*/
+export const compareDate = (dataVal = '') => {
+  // 获得当天日期的时间
+  const today = new Date()
+  const todayValue = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  // 获得选择日期的时间
+  const dateStamp = new Date(dataVal).getTime()
+  return dateStamp >= todayValue.getTime()
 }

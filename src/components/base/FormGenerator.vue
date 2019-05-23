@@ -7,23 +7,48 @@
                @input="updateForm(field.model, $event)"
                v-validate="field.rules || {}"
                :error="errors.first(field.label)"
-               v-bind="field">
-      <slot :field="field">
-        <!-- 默认内容 -->
-        {{ field.fieldType }}
-      </slot>
+               v-bind="field"
+               v-if="!field.isComponentShow">
+      <template :slot="field.slotName"  slot-scope="{slotInfo: {item}}">
+        <!--对象-->
+        <component
+          v-if="!Array.isArray(item)"
+          :is="item.fieldType"
+          v-bind="item"
+          v-model="field.formData[item.model]"
+          v-validate="item.rules"
+          v-show="field.formData[item.model] !== null">
+        </component>
+        <!--数组-->
+        <component
+          v-if="Array.isArray(item) && !itemChild.isComponentShow"
+          v-for="(itemChild, index) in item"
+          :is="itemChild.fieldType"
+          :key="index"
+          v-bind="itemChild"
+          v-model="itemChild.formData && itemChild.formData[item.model]"
+          v-validate="itemChild.rules || {}">
+        </component>
+      </template>
     </component>
   </div>
 </template>
 
 <script>
-  import MyLabel from '../label'
-  import MyInput from '../myinput'
-  import SmsCode from '../multiplexingInput'
+  import MyInput from '@/components/myinput'
+  import SmsCode from '@/components/smsverification'
+  import DatePicker from '@/components/datepicker/datepicker'
+  import MySelection from '@/components/selection'
+  import Distpicker from '@/components/distpickers/distpicker'
+  import RouterLink from '@/components/routerLink'
+  import LinkRelitive from '@/components/linkrelitive'
+  import MyLabel from '@/components/label'
+  import MyIcon from '@/components/icon/icon'
+  import AlertBox from '@/components/alertBox'
 
   export default {
     name: 'FormGenerator',
-    components: { MyInput, SmsCode, MyLabel },
+    components: { MyInput, SmsCode, DatePicker, MySelection, Distpicker, RouterLink, LinkRelitive, MyLabel, MyIcon, AlertBox },
     props: {
       value: {
         type: Object,

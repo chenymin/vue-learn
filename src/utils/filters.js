@@ -30,14 +30,42 @@ export const formatEmail = (email) => {
  * @param money
  */
 export const formatMoney = (money) => {
-  const numArr = (money || 0).toString().split('.')
-  let num = numArr[0]
-  let result = ''
+  money = (money || 0).toString()
+  if (!money.indexOf('.') > -1) {
+    money += '.00'
+  }
+  var numArr = money.toString().split('.')
+  var num = numArr[0]
+  if (numArr[1].length === 1) {
+    numArr[1] += '0'
+  }
+  var result = ''
   while (num.length > 3) {
     result = ',' + num.slice(-3) + result
     num = num.slice(0, num.length - 3)
   }
   if (num) { result = num + result }
-  if (numArr[1]) { result += `.${numArr[1]}` }
+  if (numArr[1]) { result += '.' + numArr[1] }
   return result
+}
+
+/**
+ * 将时间字符串以符号年月日分隔，例：'20190312'分隔后'2019-03-12'
+ * @param {String} value 字符窜日期
+ * @param {String} mark 分割符
+ */
+export const formatDate = (value = '', mark = '/') => {
+  const year = value.substr(0, 4)
+  const month = value.substr(4, 2)
+  const date = value.substr(6, 2)
+  return `${year}${mark}${month}${mark}${date}`
+}
+
+/**
+ * 显示银行卡后四位，例：'3265986532146598'---->'**** **** **** 6598'
+ * @param {String} value 字符窜日期
+ * @param {String} mark 分割符
+ */
+export const formatBankCard = (value = '') => {
+  return value.replace(/\s/g, '').replace(/(\d{4})\d+(\d{4})$/, '**** **** **** $2')
 }

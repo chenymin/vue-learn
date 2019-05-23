@@ -8,19 +8,19 @@
     background-color: #fff;
     height: 1rem;
     padding: 0 $padding-left;
-    overflow: hidden;
+    //overflow: hidden;
     &::after {
       position: absolute;
       content: '';
       border-bottom: 1px solid $form-border-color;
-      width: 100%;
+      width: calc(100% - .3rem);
       height: 1px;
       margin-top: -1px;
       top:100%;
       left: 0.3rem;
     }
     .label {
-      width: $form-label-width;
+      min-width: $form-label-width;
       font-size: $middle-font-size;
       color: $form-label-color;
     }
@@ -28,6 +28,10 @@
       flex: 1;
       font-size: $middle-font-size;
       height: 100%;
+      color: $form-label-color;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
     .unit {
       position: absolute;
@@ -40,11 +44,11 @@
       text-align: right;
     }
    .term {
-    display: flex;
-    flex: 1;
-    justify-content: flex-end;
-    font-size: $middle-font-size;
-    color: #444;
+      display: flex;
+      flex: 1;
+      justify-content: flex-end;
+      font-size: $middle-font-size;
+      color: #444;
     }
 
     .img-code{

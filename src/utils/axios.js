@@ -1,13 +1,12 @@
 import axios from 'axios'
-import URLSearchParams from 'url-search-params'
+import { Base64 } from 'js-base64'
 import {getStore} from './storage'
 import store from '../store/index'
 import eventBus from '../utils/eventBus'
 import _ from 'lodash'
-import router from '../router/index'
-import {getUrl} from '../utils/util'
 
-export const url = process.env.NODE_ENV === 'development' ? 'http://10.166.2.66:8082' : getUrl() + '/credit-server-web'
+const dev = 'http://10.166.10.76:22201'
+export const url = process.env.NODE_ENV === 'development' ? dev : ''
 
 const showToast = (msg) => {
   store.commit('changeToast', {content: msg})
@@ -15,16 +14,13 @@ const showToast = (msg) => {
 }
 
 const instance = axios.create({
-  baseURL: url,
-  timeout: 10000,
+  baseURL: `${url}/transfer-mng`,
+  timeout: 300000,
   xsrfCookieName: '_csrf',
   xsrfHeaderName: '_csrf',
   transformRequest: [function (data, headers) {
     if (_.isEmpty(data)) return data
-    // transform obj to formData
-    var params = new URLSearchParams()
-    Object.entries(data).forEach((item) => params.append.apply(params, item))
-    return params
+    return Base64.encode(JSON.stringify(data))
   }],
   validateStatus (status) {
     return status === 200
@@ -35,33 +31,24 @@ const instance = axios.create({
 instance.interceptors.request.use((config) => {
   // before request send, set csrf
   eventBus.$emit('loding/show')
-  if (!config.headers.authorization) {
-    config.headers.authorization = getStore('token')
+  if (!config.headers.tokenId) {
+    config.headers.tokenId = getStore('token')
   }
-  config.headers.proType = getStore('projectNo')
+  config.headers['Content-Type'] = 'text/plain'
   document.cookie = `_csrf=${new Date().getTime()}; path=/`
   return config
 })
 
 // 返回拦截器
 instance.interceptors.response.use(
-  ({data: {code, message, data, statusCode}}) => {
+  ({data: {data, respCode, respMsg}}) => {
     eventBus.$emit('loding/hidden')
-    // console.log(code)
-    if (code === 'fail') {
-      if (!statusCode) {
-        showToast(message)
-      } else if (statusCode === '0000') {
-        showToast(message)
+    if (respCode && respCode !== '000000') {
+      if (respCode && (respCode !== '999996' && respCode !== '999999')) {
+        showToast(respMsg)
       }
     }
-    if (data) {
-      return {data, code, statusCode}
-    }
-    return {
-      code: '-1',
-      data: ''
-    }
+    return {data, respCode, respMsg}
   },
   (data) => {
     eventBus.$emit('loding/hidden')
@@ -72,19 +59,7 @@ instance.interceptors.response.use(
       if (!response) {
         showToast('网络异常，请稍后再试')
       } else {
-        const {status} = response
-        if (status && status === 401) {
-          // showToast('token失效，请重新登录')
-          store.dispatch('removeToken')
-          router.replace({
-            path: '/login',
-            query: {redirect: store.state.global.fullPath}
-          })
-        } else if (status && status === 403) {
-          showToast(response.data.message)
-        } else {
-          showToast('系统出错')
-        }
+        showToast('系统出错')
       }
     }
     return Promise.reject(data)

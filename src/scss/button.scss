@@ -1,13 +1,13 @@
 $button-border-radius: 4px;
 $button-padding: 0.21rem;
 $button-border-color: #e0e0e0;
-$button-bg: #cda76e;
+$button-bg: linear-gradient(90deg,$button-bg-color1,$button-bg-color2);
 
 .primary-button {
   padding: $button-padding;
   text-align: center;
   border-radius: $button-border-radius;
-  background-color: $button-bg;
+  background: $button-bg;
   color: #fff;
   margin: 0 $primary-padding-bottom;
   font-size: $primary-font-size;
@@ -25,4 +25,8 @@ $button-bg: #cda76e;
 
 .btn-top {
   margin-top: 0.3rem
+}
+
+.btn-left_zero {
+  margin: 0.3rem 0
 }

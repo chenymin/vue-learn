@@ -1,27 +1,37 @@
 <template>
-  <div class="sms-container">
-    <sms-input :props='props' :model='model' ref="smsCode" @myInput="getValue">
-      <button slot="input-slot" class='sms-code' 
-        :disabled="!isCountDisable" 
-        :class="{'able-activity': isCountDisable}" 
-        v-text="countText" @click.prevent='sendCode()'>
-      </button>
-    </sms-input>
+  <div class="sms-input-component">
+      <my-input
+        v-model="innerValue"
+        v-on="$listeners"
+        v-bind="$attrs">
+        <button slot="input-slot" class='sms-code'
+                :disabled="!isCountDisable"
+                :class="{'able-activity': isCountDisable}"
+                v-text="countText" @click.prevent='sendCode()'>
+        </button>
+    </my-input>
   </div>
 </template>
 
 <script>
-  import SmsInput from './input.vue'
+  import MyInput from './myinput'
+  import axios from '@/utils/axios'
   export default {
-    model: {
-      prop: 'smsCode',
-      event: 'sms-change'
+    inheritAttrs: false,
+    $_veeValidate: {
+      name () {
+        return this.$attrs.label
+      },
+      value () {
+        return this.value
+      }
     },
     data () {
       return {
+        innerValue: '',
+        isCountDisable: this.isSendDisable,
         countInterval: '',
-        countText: this.smsText,
-        isCountDisable: this.isSendDisable
+        countText: this.smsText
       }
     },
     props: {
@@ -33,34 +43,58 @@
         type: Boolean,
         default: false
       },
-      props: {
-        type: Object,
-        default: {}
-      },
-      model: {
-        type: String,
-        default: ''
-      },
-      type: {
-        type: String,
-        default: '1'
+      // must be included in props
+      value: {
+        type: null
       },
       mobile: {
         type: String,
         default: ''
       },
-      smsCode: {
+      isMobile: {
+        type: Boolean,
+        default: false
+      },
+      interfaceUrl: {  // 发送短信的接口地址（因为接口会不同）
         type: String,
-        default: ''
+        default: '/entLimit/sendSmsValidate'
+      },
+      paramsObj: {  // 发送短信的传参（因为接口会不同）
+        type: Object,
+        default: () => {}
+      }
+    },
+    components: {
+      MyInput
+    },
+    watch: {
+      // Handles internal model changes.
+      innerValue (newVal) {
+        this.$emit('input', newVal)
+      },
+      // Handles external model changes.
+      value (newVal) {
+        this.innerValue = newVal
+      },
+      isSendDisable (newVal) {
+        this.isCountDisable = newVal
+      },
+      isMobile () {
+        this.isCountDisable = !this.isMobile
       }
     },
     methods: {
-      getValue (item) {
-        this.$emit('sms-change', item[this.model])
-      },
       sendCode () {
-        const {model, form} = this.$refs.smsCode
-        this.eventBus.$emit('smsverification/send', {type: this.type, [model]: form[model], mobileNum: this.mobile})
+        this.isCountDisable = false
+        axios.post(this.interfaceUrl, Object.assign(this.paramsObj, {bankPhoneNo: this.mobile})).then(({data, respCode}) => {
+          if (respCode === '000000') {
+            this.countdown()
+          } else {
+            this.isCountDisable = true
+          }
+        }).catch(() => {
+          this.isCountDisable = true
+        })
       },
       // 60秒倒计时
       countdown () {
@@ -81,34 +115,26 @@
         this.countInterval && window.clearInterval(this.countInterval)
       }
     },
-    watch: {
-      isSendDisable (val) {
-        this.isCountDisable = this.isSendDisable
-      }
-    },
-    components: {
-      SmsInput
-    },
     mounted () {
-      this.eventBus.$on('smsverification/countdown', this.countdown)
-    },
-    destroyed () {
-      this.eventBus.$off('smsverification/countdown')
+      if (this.value) {
+        this.innerValue = this.value
+      }
     }
   }
 </script>
 
+
 <style lang="scss" scoped>
-  .sms-container {
+  .sms-input-component {
     .sms-code {
-        height: 1rem;
-        width: 2rem;
-        position: absolute;
-        top: 0;
-        right: 0px;
-        background-color: #f5f5f5;
-        font-size: 0.28rem;
-        color: #999;
+      height: 1rem;
+      width: 2rem;
+      position: absolute;
+      top: 0;
+      right: 0px;
+      background-color: #f5f5f5;
+      font-size: 0.28rem;
+      color: #999;
     }
     .able-activity {
       background-color: #ffefea;

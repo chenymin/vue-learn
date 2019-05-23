@@ -10,6 +10,8 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 var env = config.build.env
+// 项目配置对应值
+const prjectConfig = require('../config/project.env')
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -23,7 +25,8 @@ var webpackConfig = merge(baseWebpackConfig, {
     vue: ['vue'],
     vuex: ['vuex'],
     vueRouter: ['vue-router'],
-    jquery: ['jquery']
+    jquery: ['jquery'],
+    veeValidate: ['vee-validate']
   },
   output: {
     path: config.build.assetsRoot,
@@ -33,7 +36,8 @@ var webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
-      'process.env': env
+      'process.env': env,
+      'process.env.PROJECT': prjectConfig[process.env.VUE_APP_BRAND]
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -73,7 +77,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.HashedModuleIdsPlugin(),
     // 取入口指定的依赖独立打包，minChunks: Infinity,的用意是让插件别管其他，就按照设置的数组提取文件就好
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['jquery', 'vue', 'vuex', 'vueRouter'],
+      name: ['jquery', 'vue', 'vuex', 'vueRouter', 'veeValidate'],
       minChunks: Infinity,
     }),
     // split vendor js into its own file
@@ -96,7 +100,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       minChunks: 2,
-      chunks: ['vueRouter', 'vuex', 'vue', 'jquery', 'common', 'index']
+      chunks: ['vueRouter', 'vuex', 'vue', 'jquery', 'common', 'index', 'veeValidate']
     }),
     // copy custom static assets
     new CopyWebpackPlugin([

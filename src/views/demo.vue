@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="demo">
     <confirm-dialogue :is-touch-close='isTouchClose'>
     </confirm-dialogue>
     <pic-alert :is-touch-close='isTouchClose' ></pic-alert>
@@ -8,9 +8,7 @@
                   v-model="promptShow">
     </prompt-alert>
     <button @click="myMethods">显示确认组件</button>
-    <!-- <select-search :list="list"></select-search>
-    <dots-loader></dots-loader> -->
-    <!--<selection :props="selectionCard.props" :model="selectionCard.model"></selection>-->
+
     <div class="form-wrap">
       <my-text-input
         v-model="email"
@@ -28,98 +26,51 @@
         :error="errors.first('手机号')"
       ></my-text-input>
 
-      <!--<my-switch v-model="isSwitch"></my-switch>-->
-
-      <!--<sms-verification v-model="smsVer.props.value"-->
-                        <!--:props="smsVer.props"-->
-                        <!--:model="smsVer.model">-->
-      <!--</sms-verification>-->
-
       <multiplexing-input v-model="phone1"
                           :label="filed.label"
                           v-validate="'required|phone'"
                           :error="errors.first('手机号码1')">
       </multiplexing-input>
+      <date-picker v-model="datePickerInfo.value" v-bind="datePickerInfo" v-validate="'required|cardDate'"></date-picker>
+      <dist-picker
+        v-bind="distpicker"
+        v-model="distpicker.detailCode"
+        v-validate="'required'"
+      >
+      </dist-picker>
     </div>
-
-
-    <list></list>
-    <anchored-heading :level="1">
-      <span>Hello</span> world!
-    </anchored-heading>
-
-    <mytest  :title="title" :massgae="massgae"></mytest>
   </div>
 </template>
 
 <script>
-  import MultiplexingInput from '../components/multiplexingInput.vue'
+  import MultiplexingInput from '../components/smsverification.vue'
   import ConfirmDialogue from '../components/confirmdialogue.vue'
-  // import SelectSearch from '../components/select-search.vue'
-  // import DotsLoader from '../components/loading/dots-loader.vue'
   import Selection from '../components/selection.vue'
   import PicAlert from '../components/picalert'
   import MyTextInput from '../components/myinput'
   import MySwitch from '../components/switch'
   import SmsVerification from '../components/smsverification'
   import PromptAlert from '../components/promptalert'
-  import List from './List'
-  import Vue from 'vue'
-
-  var getChildrenTextContent = function (children) {
-    return children.map(function (node) {
-      return node.children
-        ? getChildrenTextContent(node.children)
-        : node.text
-    }).join('')
-  }
-
-  Vue.component('anchored-heading', {
-    methods: {
-      clickHandler () {
-        console.log('---->')
-      }
-    },
-    render: function (createElement) {
-      // 创建 kebab-case 风格的ID
-      var headingId = getChildrenTextContent(this.$slots.default)
-        .toLowerCase()
-        .replace(/\W+/g, '-')
-
-      return createElement(
-        'h' + this.level,
-        [
-          createElement('a', {
-            attrs: {
-              name: headingId,
-              href: '#' + headingId
-            }
-          }, this.$slots.default),
-          createElement('p', {
-            style: {
-              color: 'red',
-              fontSize: '14px'
-            },
-            on: {
-              click: this.clickHandler
-            }
-          }, [
-            createElement('label', '子组件1')
-          ])
-        ]
-      )
-    },
-    props: {
-      level: {
-        type: Number,
-        required: true
-      }
-    }
-  })
+  import DatePicker from '../components/datepicker/datepicker'
+  import DistPicker from '../components/distpickers/distpicker'
 
   export default {
     data () {
       return {
+        distpicker: {
+          detailCode: '北京市-北京市-东城区',
+          model: 'address',
+          label: '企业实际经营地址',
+          placeholder: '请选择省市区',
+          readonly: true
+        },
+        datePickerInfo: {
+          label: '身份证有效期',
+          readonly: true,
+          type: 'text',
+          value: '2019-03-30',
+          placeholder: '请设置有效期限'
+        },
         filed: {
           label: '手机号码1',
           type: 'text',
@@ -209,8 +160,8 @@
       myMethods () {
         // this.eventBus.$emit('confirm/show')
         // this.eventBus.$emit('picAlert/show')
-        this.eventBus.$emit('promptAlert/show')
-        // this.promptShow = !this.promptShow
+        // this.eventBus.$emit('promptAlert/show')
+        this.promptShow = !this.promptShow
         this.$validator.validateAll().then((item, a) => {
           console.log(item, this.$validator.errors.items)
         })
@@ -221,31 +172,17 @@
     },
     components: {
       ConfirmDialogue,
-      // SelectSearch,
-      // DotsLoader,
       Selection,
       PicAlert,
       MyTextInput,
       MySwitch,
       SmsVerification,
       PromptAlert,
-      List,
       MultiplexingInput,
-      'mytest': {
-        template: `<div>这是个h1标题{{title}}</div>`,
-        props: ['title'],
-        data () {
-          return {
-            mag: '111'
-          }
-        },
-        created () {
-          console.log(this.$attrs) // 注意这里
-        }
-      }
+      DatePicker,
+      DistPicker
     },
     mounted () {
-      this.eventBus.$on('confirm/ok', this.test)
     },
     destroyed () {
       this.eventBus.$off('confirm/ok')

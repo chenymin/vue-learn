@@ -13,7 +13,7 @@
         formData: {
           email: null,
           phone: null,
-          smsCode: null
+          smsCode: '23232'
         },
         schema: [
           {
