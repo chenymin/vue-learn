@@ -7,7 +7,7 @@ const IDValidator = require('id-validator')
  */
 export const validMobile = (mobile) => {
   mobile = mobile && mobile.replace(/\D/g, '')
-  return mobile.length === 11 && /^((13|14|15|17|18|19)[0-9]{1}\d{8})$/.test(mobile)
+  return mobile.length === 11 && /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(mobile)
 }
 
 /**
