@@ -10,7 +10,10 @@ const UploadDetail = r => require.ensure([], () => r(require('@/views/applyLoan/
 const UploadSpec = r => require.ensure([], () => r(require('@/views/applyLoan/uploadSpec')), 'chunk-uploadSpec')
 const Complete = r => require.ensure([], () => r(require('@/views/applyLoan/complete')), 'chunk-complete')
 
+const UserBuildDemo = r => require.ensure([], () => r(require('@/views/userBuildDemo')), 'chunk-userBuildDemo')
+
 const routerList = [
+  { name: 'builddemo', path: '/builddemo', component: UserBuildDemo, meta: { auth: false, title: '测试build模式', transitionName: `slide` } },
   // 额度状态
   {name: 'status', path: '/status', component: Status, meta: {auth: false, needIntercept: false, title: '额度状态', transitionName: `slide`}},
   // 申请

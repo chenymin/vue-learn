@@ -1,24 +1,19 @@
 import _ from 'lodash'
 import Vue from 'vue'
+import FormGenerator from '@/components/base/FormGenerator'
+
+if (!Vue.options.components.FormGenerator) {
+  Vue.component(
+    'FormGenerator',
+    FormGenerator
+  )
+}
 
 export default {
   inject: ['applyRouter'],
   data () {
     return {
       name: 'FormGenerator'
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    if (!Vue.options.components.FormGenerator) {
-      import('@/components/base/FormGenerator').then((item) => {
-        Vue.component(
-          'FormGenerator',
-          item
-        )
-        next()
-      })
-    } else {
-      next()
     }
   },
   methods: {

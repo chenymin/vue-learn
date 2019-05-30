@@ -3,7 +3,6 @@
     <component :is="layout">
       <router-view :layout.sync="layout"/>
     </component>
-    <router-view></router-view>
     <my-toast
       :title="toast.title"
       :content="toast.content">
