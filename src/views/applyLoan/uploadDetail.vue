@@ -219,7 +219,7 @@
     },
     created () {
       this.getInitImg()
-      this.getPicData()
+      // this.getPicData()
     }
   }
 </script>

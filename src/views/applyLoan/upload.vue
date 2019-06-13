@@ -120,7 +120,7 @@
     },
     mounted () {
       this.applyRouter.currentIndex = this.pageCurrentIndex
-      this.getInitImageData()
+      // this.getInitImageData()
       if (getStore('chbAndsTimeObj')) {
         this.protocolCode = JSON.parse(getStore('chbAndsTimeObj')).val || '0'
         this.signTime = JSON.parse(getStore('chbAndsTimeObj')).signTime || new Date().format('yyyy-MM-dd hh:mm:ss')
