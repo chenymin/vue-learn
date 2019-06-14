@@ -17,7 +17,7 @@ const IOC = r => require.ensure([], () => r(require('@/views/ioc/IOC')), 'chunk-
 const routerList = [
   { name: 'builddemo', path: '/builddemo', component: UserBuildDemo, meta: { auth: false, title: '测试build模式', transitionName: `slide` } },
   { name: 'hookDemo', path: '/hookDemo', component: HookDemo, meta: { auth: false, title: '测试hook模式', transitionName: `slide` } },
-  { name: 'iocDemo', path: '/iocDemo', component: IOC, meta: { auth: false, title: '测试hook模式', transitionName: `slide` } },
+  { name: 'iocDemo', path: '/iocDemo', component: IOC, meta: { auth: false, title: '测试ioc模式', transitionName: `slide` } },
   // 额度状态
   {name: 'status', path: '/status', component: Status, meta: {auth: false, needIntercept: false, title: '额度状态', transitionName: `slide`}},
   // 申请
