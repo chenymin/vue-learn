@@ -10,6 +10,7 @@ import eventBus from '@/utils/eventBus'
 import VeeValidate, {Validator} from 'vee-validate'
 import dictionary from '@/utils/validatorConfig'
 import zh from 'vee-validate/dist/locale/zh_CN'
+import serviceContainer from '@/utils/service-container'
 
 // 有赞vant组件
 import { DatetimePicker } from 'vant'
@@ -39,6 +40,7 @@ Object.keys(filters).forEach(function (key, index, arr) {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  provide: serviceContainer,
   router,
   store,
   render: h => h(App)
