@@ -59,7 +59,7 @@
     }
     .pentagram{
       position: absolute;
-      top: 0;
+      top: -.06rem;
       width: 0.5rem;
       height: 0.5rem;
       border-radius: 50%;
@@ -73,7 +73,7 @@
     }
     .solid-round{
       background: linear-gradient(to bottom, $pagenavigate-component-circle-bg-color1,$pagenavigate-component-circle-bg-color2);
-      border: 1px solid $pagenavigate-component-circle-bg-color1!important;
+      border: none!important;
     }
     .hollow-round{
       border:1px solid $pagenavigate-component-circle-border-color;
@@ -81,7 +81,7 @@
     .line{
       position: absolute;
       left: calc(50% + .2rem);
-      top: 10px;
+      top: 0.17rem;
       width: calc(100% - 0.4rem);
       border-top: 1px dashed $pagenavigate-component-circle-border-color;
       z-index: 0;

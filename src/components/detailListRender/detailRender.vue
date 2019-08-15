@@ -1,7 +1,7 @@
 <template>
   <div class="detail-render-component">
     <ul class="list">
-      <li class="item" v-for="(item, index) in list" :key="index" >
+      <li class="item" v-for="(item, index) in list" :key="index" v-if="!item.isHidden">
         <span class="left-text">{{item.label}}</span>
         <template v-if="item.render">
           <Render :column="item" :index="index" :render="item.render" :value="extractDetailValue(item.model)"></Render>
@@ -66,7 +66,7 @@
       &::after {
         position: absolute;
         content: '';
-        border-bottom: 1px solid rgba(231,231,231,1);;
+        border-bottom: 1px solid #eee;
         width: 100%;
         height: 1px;
         margin-top: -1px;
@@ -84,6 +84,9 @@
         margin-right: 0.3rem;
       }
     }
+    .item:last-child:after{
+      border: none;
+    }
     .on-border {
       &::after {
         border-bottom: none;
@@ -98,5 +101,11 @@
       height: 0.32rem;
       z-index: 1;
     }
+  }
+  .red{
+    color: #FF864A
+  }
+  .gray {
+    color: #ccc;
   }
 </style>

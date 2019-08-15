@@ -6,7 +6,7 @@
         v-bind="$attrs">
         <button slot="input-slot" class='sms-code'
                 :disabled="!isCountDisable"
-                :class="{'able-activity': isCountDisable}"
+                :class="{'able-activity': !isCountDisable}"
                 v-text="countText" @click.prevent='sendCode()'>
         </button>
     </my-input>
@@ -15,7 +15,7 @@
 
 <script>
   import MyInput from './myinput'
-  import axios from '@/utils/axios'
+  import axios from 'axios'
   export default {
     inheritAttrs: false,
     $_veeValidate: {
@@ -57,11 +57,37 @@
       },
       interfaceUrl: {  // 发送短信的接口地址（因为接口会不同）
         type: String,
-        default: '/entLimit/sendSmsValidate'
+        default: '/transfer-mng/entLimit/sendSmsValidate'
       },
       paramsObj: {  // 发送短信的传参（因为接口会不同）
+        type: [Object, String]
+      },
+      config: {
         type: Object,
-        default: () => {}
+        default () {
+          const config = {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+          return config
+        }
+      },
+      responseCodeKey: {
+        type: String,
+        default: 'respCode'
+      },
+      responseMsgKey: {
+        type: String,
+        default: 'respMsg'
+      },
+      responseDataKey: {
+        type: String,
+        default: 'data'
+      },
+      responseSucessFlag: {
+        type: String,
+        default: '000000'
       }
     },
     components: {
@@ -86,10 +112,14 @@
     methods: {
       sendCode () {
         this.isCountDisable = false
-        axios.post(this.interfaceUrl, Object.assign(this.paramsObj, {bankPhoneNo: this.mobile})).then(({data, respCode}) => {
-          if (respCode === '000000') {
+        const prms = Object.assign(this.paramsObj, {bankPhoneNo: this.mobile})
+        const url = process.env.NODE_ENV === 'development' ? `/api/${this.interfaceUrl}` : this.interfaceUrl
+        axios.post(url, prms, this.config).then(({data}) => {
+          this.$emit('emit-event', data[this.responseDataKey])
+          if (data[this.responseCodeKey] === this.responseSucessFlag) {
             this.countdown()
           } else {
+            this.eventBus.$emit('toast/show', data[this.responseMsgKey])
             this.isCountDisable = true
           }
         }).catch(() => {
@@ -127,18 +157,21 @@
 <style lang="scss" scoped>
   .sms-input-component {
     .sms-code {
-      height: 1rem;
+      height: .7rem;
       width: 2rem;
       position: absolute;
-      top: 0;
-      right: 0px;
-      background-color: #f5f5f5;
+      top: 50%;
+      margin-top: -.35rem;
+      right: 0.3rem;
       font-size: 0.28rem;
-      color: #999;
+      border-radius: 4px;
+      color: #FE5C02;
+      background-color: #FDF5E4;
     }
     .able-activity {
-      background-color: #ffefea;
-      color: #ff6633
+      border: none;
+      background-color: #EEE!important;
+      color: #999;
     }
   }
 </style>

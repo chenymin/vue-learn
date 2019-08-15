@@ -7,7 +7,9 @@
 
 <script>
   import FormGenerator from '../components/base/FormGenerator'
+  import formGeneratorMixin from '@/mixin/formGeneratorMixin'
   export default {
+    mixins: [formGeneratorMixin],
     data () {
       return {
         formData: {

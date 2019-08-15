@@ -1,7 +1,7 @@
 <template>
   <div class="toast-content" v-if="isShow">
     <p class="text">{{title}}</p>
-    <p class="text">{{content}}</p>
+    <p class="text">{{innerContext}}</p>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
     name: 'toast',
     data () {
       return {
+        innerContext: '',
         isShow: false,
         timers: [],
         autoClose: true
@@ -21,8 +22,9 @@
       'duration'
     ],
     methods: {
-      showToast () {
+      showToast (val) {
         this.isShow = true
+        this.innerContext = val || this.content
       },
       countdown () {
         if (this.autoClose) {
@@ -42,9 +44,13 @@
           this.timers = []
           this.countdown()
         }
+      },
+      'content' (newVal) {
+        this.innerContext = newVal
       }
     },
     created () {
+      this.innerContext = this.content
       this.eventBus.$on('toast/show', this.showToast)
     },
     destroyed () {

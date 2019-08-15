@@ -111,7 +111,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.2rem;
+      font-size: 0.24rem;
       color: #333;
       height: 1.6rem;
       padding: 0 0.5rem;

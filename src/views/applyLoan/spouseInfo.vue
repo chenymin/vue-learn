@@ -12,12 +12,13 @@
 
 <script>
   import applyCommonMixin from '@/mixin/applyCommonMixin'
+  import formGeneratorMixin from '@/mixin/formGeneratorMixin'
   import spouseInfo from 'pageConfigInfo/apply/spouseInfo'
   import MyHeader from '@/components/header'
   import {getStore, setStore} from '@/utils/storage'
 
   export default {
-    mixins: [applyCommonMixin],
+    mixins: [applyCommonMixin, formGeneratorMixin],
     data () {
       return {
         ...spouseInfo

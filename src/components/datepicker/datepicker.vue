@@ -213,19 +213,19 @@
 
     &__input-group__list {
       display: flex;
-      .input-comp {
+      .input-component {
         padding: 0;
         flex: 1;
         .form-filed {
           padding: 0;
         }
       }
-      .input-comp:nth-child(1) {
+      .input-component:nth-child(1) {
         .value {
           padding-left: .3rem;
         }
       }
-      .input-comp:nth-child(2) {
+      .input-component:nth-child(2) {
         overflow: hidden;
         .form-filed:after{
           left: 0;
@@ -234,7 +234,7 @@
           min-width: auto;
         }
         .value {
-          padding-left: .9rem;
+          padding-left: .3rem;
         }
       }
     }

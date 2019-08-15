@@ -7,11 +7,12 @@
 
 <script>
   import applyCommonMixin from '@/mixin/applyCommonMixin'
+  import formGeneratorMixin from '@/mixin/formGeneratorMixin'
   import additionalInfo from 'pageConfigInfo/apply/additionalInfo'
   import {getStore} from '@/utils/storage'
   import Dictionary from '@/utils/dictionary'
   export default {
-    mixins: [applyCommonMixin],
+    mixins: [applyCommonMixin, formGeneratorMixin],
     data () {
       return {
         ...additionalInfo,

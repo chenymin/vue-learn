@@ -31,6 +31,7 @@
 <script>
   import Exif from 'exif-js'
   import {getStore} from '../../utils/storage'
+  import uploadPicService from '../../api/loanApply'
   import TransitionExpand from '../transition/transitionExpand'
 
   export default {
@@ -282,9 +283,13 @@
         let param = {}
         param.applyToken = getStore('applyToken')
         param.imageNo = this.imgList[index].imageNo
-        this.currentIndex--
-        this.imgList.splice(this.removeIndex, 1)
-        this.eventBus.$emit('confirm/hidden')
+        uploadPicService.deletePic(this.deleteUrl, param).then(({data, respCode}) => {
+          if (respCode === '000000') {
+            this.currentIndex--
+            this.imgList.splice(this.removeIndex, 1)
+            this.eventBus.$emit('confirm/hidden')
+          }
+        })
       },
       postImg () {
         this.status = 1
@@ -295,28 +300,27 @@
         param.append('file', this.picValue)
         param.append('randomCode', randomCode)
         param.append('imageType', this.imageType)
-        // uploadPicService.uploadPic(this.uploadUrl, param, {
-        //   method: 'post',
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data'
-        //   },
-        //   onUploadProgress: (e) => {
-        //     const percentCompleted = Math.round((e.loaded * 100) / e.total)
-        //     this.progressStyle = {width: `${percentCompleted}%`}
-        //   }
-        // }).then(({data, respCode}) => {
-        //   this.$refs.uploadFileInput.value = null
-        //   if (respCode === '000000') {
-        //     this.status = 0
-        //     this.currentIndex++
-        //     this.resizeImage(data, 'wspectFill')
-        //     this.imgList.push(data.imageInfo)
-        //   } else {
-        //     this.status = 2
-        //   }
-        // }).catch(() => {
-        //   this.status = 2
-        // })
+        uploadPicService.uploadPic(this.uploadUrl, param, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: (e) => {
+            const percentCompleted = Math.round((e.loaded * 100) / e.total)
+            this.progressStyle = {width: `${percentCompleted}%`}
+          }
+        }).then(({data, respCode}) => {
+          this.$refs.uploadFileInput.value = null
+          if (respCode === '000000') {
+            this.status = 0
+            this.currentIndex++
+            this.imgList.push(data.imageInfo)
+          } else {
+            this.status = 2
+          }
+        }).catch(() => {
+          this.status = 2
+        })
         return true
       },
       resizeImage (item, mode) {
@@ -346,7 +350,7 @@
       },
       initImg () {
         this.imgList.map((item) => {
-          this.resizeImage(item, 'wspectFill')
+          // this.resizeImage(item, 'wspectFill')
         })
       }
     },
@@ -411,7 +415,8 @@
         width: 1.8rem;
         height: 0.64rem;
         margin-left: -0.9rem;
-        margin-top: -0.375rem
+        margin-top: -0.375rem;
+        text-align: center;
       }
       .uploading {
         position: absolute;

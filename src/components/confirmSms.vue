@@ -27,7 +27,7 @@ export default {
   data () {
     return {
       isShowConfirmDialogue: this.isShow,
-      sentSms: false,
+      sentSms: true,
       isPhoneNo: true,
       smsTxt: null
     }
@@ -117,42 +117,41 @@ export default {
 			font-weight:400;
 			color:rgba(51,51,51,1);
 			line-height:0.42rem;
-			padding: 0.3rem 0 0.4rem;
+			padding-top: 0.3rem;
     }
     .text {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.2rem;
-      color: #333;
-      padding: 0 0.5rem 0.4rem;
+      font-size: 0.26rem;
+      color: #949494;
+      padding: 0.3rem;
     }
     .confirmSms {
-    	.input-comp {
+    	.input-component {
     		padding: 0 0.38rem 0.3rem;
     		.form-filed {
     			position: relative;
-          height: .6rem;
+          display: flex;
           .input {
-          	    height: 0.6rem;
-						    width: 100%;
-						    position: absolute;
-						    top: 0;
-						    left: 0;
-						    border: 1px solid rgba(151,151,151,.6);
-						    font-size: 0.2rem;
-						    padding-left:0.2rem;
+            height: 0.6rem;
+            width: calc(100% - 2rem);
+            font-size: 0.24rem;
+            padding-left:0.2rem;
+            border: 1px solid rgba(151,151,151,.6);
           }
           .sms-code {
+            position: relative;
+            margin-top: 0;
           	height: 0.6rem;
 				    width: 2rem;
-				    position: absolute;
-				    top: 0;
-				    right: 0px;
+            right: 0;
 				    background-color: #f5f5f5;
 				    font-size: 0.28rem;
 				    color: #999;
-				    border: 1px solid rgba(151,151,151,.6);
+            border-radius: 0;
+            border: 1px solid rgba(151, 151, 151, 0.6);
+            border-left: none;
           }
     		}
     	}
@@ -163,7 +162,7 @@ export default {
         flex: 1;
         height: 0.9rem;
         border-top: 1px solid #eee;
-        font-size: 0.36rem;
+        font-size: 0.3rem;
       }
       .cancle {
         border-right: 1px solid #eee;

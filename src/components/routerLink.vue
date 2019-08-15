@@ -4,7 +4,7 @@
       <label class="router-link-component__label">{{label}}</label>
       <router-link :to="{name: routerName, query: params}" class="router-link-component__link"
                    :class="[...routerLinkComponentLinkClass]">{{linkText}}</router-link>
-      <span class="arrow-right" v-if="!isShowArrow"></span>
+      <span class="arrow-right arrow-bg_color_333" v-if="!isShowArrow"></span>
     </p>
   </div>
 </template>

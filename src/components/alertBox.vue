@@ -36,9 +36,9 @@
       content: '';
       bottom: -12px;
       right: 0;
-      opacity: 0.4;
-      border: 6px solid #333;
-      border-color: #333 #333 transparent transparent;
+      opacity: 0.6;
+      border: 6px solid #000;
+      border-color: #000 #000 transparent transparent;
     }
     &__outer {
       height: 100%;
@@ -49,8 +49,8 @@
       top:0;
       height: 100%;
       width: 100%;
-      background-color: #333;
-      opacity: 0.4;
+      background-color: #000;
+      opacity: 0.6;
       z-index: 1;
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;

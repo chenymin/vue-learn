@@ -42,13 +42,14 @@
   import Distpicker from '@/components/distpickers/distpicker'
   import RouterLink from '@/components/routerLink'
   import LinkRelitive from '@/components/linkrelitive'
-  import MyLabel from '@/components/label'
+  import MyLabel from '@/components/label/label'
   import MyIcon from '@/components/icon/icon'
   import AlertBox from '@/components/alertBox'
+  import CreaditLabel from '@/components/creaditLabel'
 
   export default {
     name: 'FormGenerator',
-    components: { MyInput, SmsCode, DatePicker, MySelection, Distpicker, RouterLink, LinkRelitive, MyLabel, MyIcon, AlertBox },
+    components: { MyInput, SmsCode, DatePicker, MySelection, Distpicker, RouterLink, LinkRelitive, MyLabel, MyIcon, AlertBox, CreaditLabel },
     props: {
       value: {
         type: Object,

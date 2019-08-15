@@ -5,7 +5,7 @@
       我已阅读并同意
       <slot name="protocol-slot">
         <router-link class="text-color" v-for="(item, index) in items" :key="index" :to = "'{{item.path}}'">{{item.fileName}}</router-link>
-      </slot> 
+      </slot>
     </label>
   </div>
 </template>
@@ -46,7 +46,7 @@
     .check-box + .protocol-label::before {
       content: '';
       position: absolute;
-      top: 0.24rem;
+      top: 50%;
       left: 0;
       border:1px solid #C0A778;
       width:0.26rem;
@@ -55,6 +55,7 @@
       text-align: center;
       vertical-align: middle;
       line-height: 0.4rem;
+      margin-top: -.13rem;
     }
     .check-box:checked + .protocol-label::before {
       background-color: #fff;
@@ -65,12 +66,13 @@
       width: 0.16rem;
       height: 0.09rem;
       background: transparent;
-      top: 0.29rem;
-      left: 0.03rem;
-      border:0.02rem solid #C0A778;
+      top: 50%;
+      left: 0.04rem;
+      border: 0.02rem solid #C0A778;
       border-top: none;
       border-right: none;
       transform: rotate(-45deg);
+      margin-top: -0.09rem;
     }
     .protocol-label {
       position: absolute;
@@ -87,6 +89,6 @@
       color: #6596f0;
     }
   }
-  
+
 </style>
 

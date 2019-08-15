@@ -4,9 +4,10 @@
       <span slot="input-slot" class="arrow-right" v-if="isNoArrow"></span>
     </my-input>
     <cover-container :is-show='isShow' v-on:cover-hidden='noticeClose'>
-      <transition-expand slot='cover-slot'>
-        <div :class="wrapper" v-if="isShow">
-          <template>
+    </cover-container>
+    <transition-expand>
+      <div :class="wrapper" v-if="isShow">
+        <template>
           <div :class="addressHeader">
             <span class="remove" @click.prevent="hiddenArea"></span>
             <ul>
@@ -31,9 +32,8 @@
             </template>
           </div>
         </template>
-        </div>
-      </transition-expand>
-    </cover-container>
+      </div>
+    </transition-expand>
   </div>
 </template>
 
@@ -241,7 +241,7 @@ export default {
         return
       }
       $('html').addClass('noscroll')
-      Array.from($('.area-container')).forEach((item) => {
+      Array.from($('.distpicker-component')).forEach((item) => {
         smartScrolls($(item), '.list')
       })
       this.isShow = true

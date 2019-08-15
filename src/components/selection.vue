@@ -4,28 +4,28 @@
         <span slot="input-slot" class="arrow-right" v-if="isNoArrow"></span>
       </my-input>
       <cover-container :is-show='isShow' v-on:cover-hidden='noticeClose'>
-        <transition-expand slot='cover-slot'>
-          <div id="mySelect" class="select-wrap" v-if="isShow">
-            <p class="title" v-if="isShowHeaderTitle">
-              <span class="remove" @click="hiddenSelect"></span>
-              请选择{{this.$attrs.label || ''}}
-            </p>
-            <p class="area" v-if="selectType === 'area' && isShowHeaderTitle">
-              <span class="choice">请选择</span>
-              <span class="province">{{this.$attrs.label || ''}}</span>
-            </p>
-            <ul class="list">
-              <li class="item" v-for="(item, index) in list" :key='index'
-                              :class="{'selected': (index === currentIndex) && selectType !== 'area'}"
-                              v-show="!item.delete"
-                              @click="selectItem(item, index)">
-                {{getOptionLabel(item)}}
-              </li>
-              <slot name="selection-bottom"></slot>
-            </ul>
-          </div>
-        </transition-expand>
       </cover-container>
+      <transition-expand slot='cover-slot'>
+        <div id="mySelect" class="select-wrap" v-if="isShow">
+          <p class="title" v-if="isShowHeaderTitle">
+            <span class="remove" @click="hiddenSelect"></span>
+            请选择{{this.$attrs.label || ''}}
+          </p>
+          <p class="area" v-if="selectType === 'area' && isShowHeaderTitle">
+            <span class="choice">请选择</span>
+            <span class="province">{{this.$attrs.label || ''}}</span>
+          </p>
+          <ul class="list">
+            <li class="item" v-for="(item, index) in list" :key='index'
+                :class="{'selected': (index === currentIndex) && selectType !== 'area'}"
+                v-show="!item.delete"
+                @click="selectItem(item, index)">
+              {{getOptionLabel(item)}}
+            </li>
+            <slot name="selection-bottom"></slot>
+          </ul>
+        </div>
+      </transition-expand>
     </div>
 
 </template>
@@ -140,7 +140,7 @@
       hiddenSelect () {
         this.isShow = false
         $('html').removeClass('noscroll')
-        Array.from($('.selection-container')).forEach((item) => {
+        Array.from($('.selection-component')).forEach((item) => {
           $(item).off()
         })
       },
@@ -150,7 +150,7 @@
           return
         }
         $('html').addClass('noscroll')
-        Array.from($('.selection-container')).forEach((item) => {
+        Array.from($('.selection-component')).forEach((item) => {
           smartScrolls($(item), '.list')
         })
         this.isShow = true

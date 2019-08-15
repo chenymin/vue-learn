@@ -7,10 +7,11 @@
 
 <script>
   import applyCommonMixin from '@/mixin/applyCommonMixin'
+  import formGeneratorMixin from '@/mixin/formGeneratorMixin'
   import enterpriseInfo from 'pageConfigInfo/apply/enterpriseInfo'
 
   export default {
-    mixins: [applyCommonMixin],
+    mixins: [applyCommonMixin, formGeneratorMixin],
     data () {
       return {
         ...enterpriseInfo

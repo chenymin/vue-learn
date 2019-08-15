@@ -1,6 +1,6 @@
 <template>
-  <div class="input-comp">
-    <div class="form-filed">
+  <div class="input-component">
+    <div class="form-filed" :class="{'input-component__no-boeder': isNoBorderBottom}">
       <label v-if='label && isShowInputLabel' class="label">{{ label }}</label>
       <input  class="value"
               :type='type'
@@ -92,6 +92,10 @@ export default {
       default () {
         return []
       }
+    },
+    isNoBorderBottom: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -115,6 +119,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .input-component {
+    &__no-boeder:after {
+      border-bottom: none;
+    }
+  }
   .form__error {
     font-size: 0.28rem;
     padding-left: 0.3rem;
@@ -127,5 +136,23 @@ export default {
   .input-component-position_right {
     text-align: right;
     padding-right: .3rem;
+  }
+
+ .input-component-position_right__zero {
+    text-align: right;
+    padding-right: 0rem!important;
+  }
+
+  .input-component__value_black::placeholder {
+    color: #333;
+  }
+  .input-component__value_black +.arrow-right{
+    border-bottom-color: #333;
+    border-right-color: #333;
+  }
+
+  .input-component__value_black_text +.arrow-right{
+    border-bottom-color: #333;
+    border-right-color: #333;
   }
 </style>

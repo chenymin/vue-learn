@@ -7,12 +7,13 @@
 
 <script>
   import applyCommonMixin from '@/mixin/applyCommonMixin'
+  import formGeneratorMixin from '@/mixin/formGeneratorMixin'
   import {validMobile} from '@/utils/util'
   import {getStore} from '@/utils/storage'
   import legalInfo from 'pageConfigInfo/apply/legalInfo'
 
   export default {
-    mixins: [applyCommonMixin],
+    mixins: [applyCommonMixin, formGeneratorMixin],
     data () {
       return {
         ...legalInfo
