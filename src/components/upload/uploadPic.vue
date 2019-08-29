@@ -31,7 +31,7 @@
 <script>
   import Exif from 'exif-js'
   import {getStore} from '../../utils/storage'
-  import uploadPicService from '../../api/loanApply'
+  import axios from 'axios'
   import TransitionExpand from '../transition/transitionExpand'
 
   export default {
@@ -283,7 +283,7 @@
         let param = {}
         param.applyToken = getStore('applyToken')
         param.imageNo = this.imgList[index].imageNo
-        uploadPicService.deletePic(this.deleteUrl, param).then(({data, respCode}) => {
+        axios.post(this.deleteUrl, param).then(({data, respCode}) => {
           if (respCode === '000000') {
             this.currentIndex--
             this.imgList.splice(this.removeIndex, 1)
@@ -300,7 +300,7 @@
         param.append('file', this.picValue)
         param.append('randomCode', randomCode)
         param.append('imageType', this.imageType)
-        uploadPicService.uploadPic(this.uploadUrl, param, {
+        axios.post(this.uploadUrl, param, {
           method: 'post',
           headers: {
             'Content-Type': 'multipart/form-data'

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store/index'
-import {getStore} from '../utils/storage'
 import {setTitle} from '../utils/util'
 import routerList from 'routerConfigInfo/routerInfo'
+import middlewarePipeline from './middlewarePipeline'
 
 Vue.use(Router)
 
@@ -12,26 +12,19 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const {path} = to
   const {title, along} = to.meta
   setTitle(to.meta.title)
   store.commit('changeRouterInfo', {title, along})
-  if (to.meta.auth) {
-    const token = getStore('token')
-    store.commit('changeFullPath', to.fullPath)
-    if (token) {
-      next()
-    } else if (path !== 'login') {
-      next({
-        path: '/login',
-        query: {
-          redirect: to.fullPath
-        } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-      })
-    }
-  } else {
-    next()
+
+  if (!to.meta.middleware) {
+    return next()
   }
+  const middleware = to.meta.middleware
+  const context = { to, from, next, store }
+  return middleware[0]({
+    ...context,
+    nextPipe: middlewarePipeline(context, middleware, 1)
+  })
 })
 
 export default router
