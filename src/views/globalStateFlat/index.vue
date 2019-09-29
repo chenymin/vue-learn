@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="global">
     <ArticleList :articles="articles"/>
   </div>
 </template>
@@ -10,7 +10,6 @@
   import ArticleList from './ArticleList'
 
   export default {
-    name: 'App',
     components: {
       ArticleList
     },
@@ -27,11 +26,4 @@
 </script>
 
 <style>
-  #app {
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
 </style>

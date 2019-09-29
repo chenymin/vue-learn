@@ -5,6 +5,8 @@ import * as mutations from './mutations'
 import * as getters from './getters'
 import global from './modules/global'
 import loanApply from './modules/loanApply'
+import article from './modules/articles'
+import author from './modules/author'
 
 Vue.use(Vuex)
 
@@ -16,7 +18,9 @@ export default new Vuex.Store({
   mutations,
   modules: {
     global,
-    loanApply
+    loanApply,
+    article,
+    author
   },
   strict: debug
 })

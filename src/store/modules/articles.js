@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import { normalizeRelations, resolveRelations } from '../helpers'
-import articleService from '../../services/article'
+import { normalizeRelations, resolveRelations } from '../helps'
+import articleService from '@/api/articles'
 
 const state = {
   byId: {},
