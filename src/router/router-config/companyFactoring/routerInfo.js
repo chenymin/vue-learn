@@ -15,6 +15,7 @@ const HookDemo = r => require.ensure([], () => r(require('@/views/hook/hookDemo'
 const IOC = r => require.ensure([], () => r(require('@/views/ioc/IOC')), 'chunk-IOC')
 const QueryBuilder = r => require.ensure([], () => r(require('@/views/queryBuilder/index')), 'chunk-queryBuilder')
 const GlobalStateFlat = r => require.ensure([], () => r(require('@/views/globalStateFlat/index')), 'chunk-globalStateFlat')
+const AbstractDataLayer = r => require.ensure([], () => r(require('@/views/abstractDataLayer/index')), 'chunk-abstractDataLayer')
 
 const routerList = [
   { name: 'builddemo', path: '/builddemo', component: UserBuildDemo, meta: { auth: false, title: '测试build模式', transitionName: `slide` } },
@@ -22,6 +23,7 @@ const routerList = [
   { name: 'iocDemo', path: '/iocDemo', component: IOC, meta: { auth: false, title: '测试ioc模式', transitionName: `slide` } },
   { name: 'queryBuilder', path: '/queryBuilder', component: QueryBuilder, meta: { auth: false, title: '测试QueryBuilder', transitionName: `slide` } },
   { name: 'globalStateFlat', path: '/globalStateFlat', component: GlobalStateFlat, meta: { auth: false, title: '测试QueryBuilder', transitionName: `slide` } },
+  { name: 'abstractDataLayer', path: '/abstractDataLayer', component: AbstractDataLayer, meta: { auth: false, title: '测试数据抽象层', transitionName: `slide` } },
   // 额度状态
   {name: 'status', path: '/status', component: Status, meta: {auth: false, needIntercept: false, title: '额度状态', transitionName: `slide`}},
   // 申请

@@ -5,6 +5,7 @@ import * as mutations from './mutations'
 import * as getters from './getters'
 import global from './modules/global'
 import loanApply from './modules/loanApply'
+import carLoanApply from './modules/carLoanApply'
 
 import { makeNormalizeRelations, makeResolveRelations } from './helps'
 import articleService from '@/api/articles'
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
   mutations,
   modules: {
     global,
+    carLoanApply,
     loanApply
   },
   strict: debug

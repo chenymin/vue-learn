@@ -1,4 +1,7 @@
+import productService from '@/views/abstractDataLayer/services/product'
+
 const state = {
+  items: []
 }
 
 const getters = {
@@ -6,9 +9,15 @@ const getters = {
 }
 
 const actions = {
+  load: async ({ commit }) => {
+    commit('add', await productService.list())
+  }
 }
 
 const mutations = {
+  add: (state, products) => {
+    state.items = products
+  }
 }
 
 export default {
