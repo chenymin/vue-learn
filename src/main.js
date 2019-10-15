@@ -16,6 +16,34 @@ import serviceContainer from '@/utils/service-container'
 import { DatetimePicker } from 'vant'
 Vue.use(DatetimePicker)
 
+import dynamicConfig from './dynamic-config'
+import makeCrudModule from './store/modules/crud'
+import makeCrudRoutes from './router/crud'
+import makeService from './api/service'
+import FormContainer from '@/views/dynamicVueCrud/FormContainer'
+import ListingContainer from '@/views/dynamicVueCrud/ListingContainer'
+
+dynamicConfig.contentTypes.forEach(contentType => {
+  // Register dynamically generated store modules.
+  store.registerModule(
+    contentType.name,
+    makeCrudModule({
+      service: makeService(contentType.endpoint)
+    })
+  )
+
+  // Register dynamically generated routes.
+  router.addRoutes(
+    makeCrudRoutes({
+      components: {
+        FormContainer,
+        ListingContainer
+      },
+      contentType
+    })
+  )
+})
+
 // 修改默认错误提示
 const config = {
   locale: zh,

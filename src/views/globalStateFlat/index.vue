@@ -14,13 +14,13 @@
       ArticleList
     },
     computed: {
-      ...mapGetters('article', { articles: 'list' })
+      ...mapGetters('articles', { articles: 'list' })
     },
     created () {
       this.loadArticles()
     },
     methods: {
-      ...mapActions('article', { loadArticles: 'load' })
+      ...mapActions('articles', { loadArticles: 'load' })
     }
   }
 </script>

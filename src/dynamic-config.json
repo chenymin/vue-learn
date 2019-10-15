@@ -1,0 +1,39 @@
+{
+  "name": "Dynamic CRUD Application",
+  "contentTypes": [
+    {
+      "name": "author",
+      "label": "Authors",
+      "endpoint": "https://jsonplaceholder.typicode.com/users",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Name",
+          "type": "text"
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "name": "post",
+      "label": "Posts",
+      "endpoint": "https://jsonplaceholder.typicode.com/posts",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "type": "text"
+        },
+        {
+          "name": "body",
+          "label": "Body",
+          "type": "textarea"
+        }
+      ]
+    }
+  ]
+}

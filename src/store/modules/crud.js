@@ -8,6 +8,18 @@ export default function makeCrudModule ({
   return {
     // Actions for `create`, `update` and `delete` omitted for brevity.
     actions: {
+      all: async ({ commit }) => {
+        // It is not strictly necessary to pass a service,
+        // but if none was passed, no data can be loaded.
+        if (!service) throw new Error('No service specified!')
+
+        const items = await service.list()
+        items.forEach(item => {
+          // Noramlize nested data and swap the related objects
+          // in the API response with an ID reference.
+          commit('add', normalizeRelations(item))
+        })
+      },
       load: async ({ commit }) => {
         // It is not strictly necessary to pass a service,
         // but if none was passed, no data can be loaded.

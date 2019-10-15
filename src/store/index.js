@@ -28,13 +28,13 @@ const store = new Vuex.Store({
 })
 
 store.registerModule(
-  'article',
+  'articles',
   makeCrudModule({
     normalizeRelations: makeNormalizeRelations({ fields: ['author'], store }),
     resolveRelations: makeResolveRelations({ fields: ['author'], store }),
     service: articleService
   })
 )
-store.registerModule('author', makeCrudModule())
+store.registerModule('authors', makeCrudModule())
 
 export default store
