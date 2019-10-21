@@ -3,6 +3,7 @@
     <component :is="layout">
       <router-view :layout.sync="layout"/>
     </component>
+    <PortalTarget name="popup"/>
     <my-toast
       :title="toast.title"
       :content="toast.content">
@@ -49,4 +50,8 @@ export default {
 
 <style lang="scss">
   @import 'scss/app.scss';
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
 </style>

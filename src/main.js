@@ -16,6 +16,12 @@ import serviceContainer from '@/utils/service-container'
 import { DatetimePicker } from 'vant'
 Vue.use(DatetimePicker)
 
+// PortalVue
+import 'wicg-inert'
+import PortalVue from 'portal-vue'
+Vue.use(PortalVue)
+
+// 动态配置
 import dynamicConfig from './dynamic-config'
 import makeCrudModule from './store/modules/crud'
 import makeCrudRoutes from './router/crud'

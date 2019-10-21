@@ -18,7 +18,20 @@ const GlobalStateFlat = r => require.ensure([], () => r(require('@/views/globalS
 const AbstractDataLayer = r => require.ensure([], () => r(require('@/views/abstractDataLayer/index')), 'chunk-abstractDataLayer')
 const DynamicVueCrud = r => require.ensure([], () => r(require('@/views/dynamicVueCrud/index')), 'chunk-dynamicVueCrud')
 
+const Product = r => require.ensure([], () => r(require('@/views/PopupOverlay/Product')), 'chunk-Product')
+const ProductImagePopup = r => require.ensure([], () => r(require('@/views/PopupOverlay/ProductImagePopup')), 'chunk-ProductImagePopup')
+
 const routerList = [
+  {
+    path: '/',
+    component: Product,
+    children: [
+      {
+        path: '/product/:id/image',
+        component: ProductImagePopup
+      }
+    ]
+  },
   { name: 'builddemo', path: '/builddemo', component: UserBuildDemo, meta: { auth: false, title: '测试build模式', transitionName: `slide` } },
   { name: 'hookDemo', path: '/hookDemo', component: HookDemo, meta: { auth: false, title: '测试hook模式', transitionName: `slide` } },
   { name: 'iocDemo', path: '/iocDemo', component: IOC, meta: { auth: false, title: '测试ioc模式', transitionName: `slide` } },
