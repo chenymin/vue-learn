@@ -239,7 +239,7 @@ export const formatBankNum = (val) => {
 }
 
 /**
- * 姓名格式化 复星星---->**星
+ * 姓名格式化 小家伙---->**火
  * @param val 姓名
  * @return String
  */

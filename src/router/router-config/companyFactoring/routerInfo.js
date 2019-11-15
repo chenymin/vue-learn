@@ -20,6 +20,7 @@ const DynamicVueCrud = r => require.ensure([], () => r(require('@/views/dynamicV
 
 const Product = r => require.ensure([], () => r(require('@/views/PopupOverlay/Product')), 'chunk-Product')
 const ProductImagePopup = r => require.ensure([], () => r(require('@/views/PopupOverlay/ProductImagePopup')), 'chunk-ProductImagePopup')
+const Recompute = r => require.ensure([], () => r(require('@/views/recompute')), 'chunk-Recompute')
 
 const routerList = [
   {
@@ -39,6 +40,7 @@ const routerList = [
   { name: 'globalStateFlat', path: '/globalStateFlat', component: GlobalStateFlat, meta: { auth: false, title: '测试QueryBuilder', transitionName: `slide` } },
   { name: 'abstractDataLayer', path: '/abstractDataLayer', component: AbstractDataLayer, meta: { auth: false, title: '测试数据抽象层', transitionName: `slide` } },
   { name: 'dynamicVueCrud', path: '/dynamicVueCrud', component: DynamicVueCrud, meta: { auth: false, title: '测试动态drmamic', transitionName: `slide` } },
+  { name: 'recompute', path: '/recompute', component: Recompute, meta: { auth: false, title: '测试动态Recompute', transitionName: `slide` } },
   // 额度状态
   {name: 'status', path: '/status', component: Status, meta: {auth: false, needIntercept: false, title: '额度状态', transitionName: `slide`}},
   // 申请
