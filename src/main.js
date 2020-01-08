@@ -50,6 +50,9 @@ dynamicConfig.contentTypes.forEach(contentType => {
   )
 })
 
+import VueObserveVisibility from 'vue-observe-visibility'
+Vue.use(VueObserveVisibility)
+
 // 修改默认错误提示
 const config = {
   locale: zh,
