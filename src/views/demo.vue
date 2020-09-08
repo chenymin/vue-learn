@@ -38,6 +38,15 @@
         v-validate="'required'"
       >
       </dist-picker>
+      <div>
+    <span>Enter serial:</span>
+    <input
+      type="text"
+      placeholder="xxx-xxx-xxx"
+      v-model="formattedSerial"
+      ref="input"
+    />
+  </div>
     </div>
   </div>
 </template>
@@ -55,8 +64,32 @@
   import DistPicker from '../components/distpickers/distpicker'
 
   export default {
+    computed: {
+      formattedSerial: {
+        get () {
+          // We split the serial in chunks of 3
+          const chunks = [];
+          [...this.serial].forEach((c, i) => {
+            let index = 0
+            if (i > 5) index = 2
+            else if (i > 2) index = 1
+            if (!chunks[index]) chunks[index] = ''
+            chunks[index] += c
+          })
+          // And then return the chunks joined by a "-"
+          return chunks.join('-')
+        },
+        set (value) {
+          // When we set the value, we remove all of the "-"
+          // And also make sure the serial can't be bigger than 9 characters
+          this.serial = value.replace(/-/g, '').substring(0, 9)
+          this.$refs.input.value = this.formattedSerial
+        }
+      }
+    },
     data () {
       return {
+        serial: '',
         distpicker: {
           detailCode: '北京市-北京市-东城区',
           model: 'address',

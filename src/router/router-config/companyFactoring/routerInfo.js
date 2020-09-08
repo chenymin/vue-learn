@@ -10,6 +10,8 @@ const UploadDetail = r => require.ensure([], () => r(require('@/views/applyLoan/
 const UploadSpec = r => require.ensure([], () => r(require('@/views/applyLoan/uploadSpec')), 'chunk-uploadSpec')
 const Complete = r => require.ensure([], () => r(require('@/views/applyLoan/complete')), 'chunk-complete')
 
+const Demo = r => require.ensure([], () => r(require('@/views/demo')), 'chunk-demo')
+
 const UserBuildDemo = r => require.ensure([], () => r(require('@/views/userBuildDemo')), 'chunk-userBuildDemo')
 const HookDemo = r => require.ensure([], () => r(require('@/views/hook/hookDemo')), 'chunk-hookDemo')
 const IOC = r => require.ensure([], () => r(require('@/views/ioc/IOC')), 'chunk-IOC')
@@ -34,6 +36,7 @@ const routerList = [
       }
     ]
   },
+  { name: 'demo', path: '/demo', component: Demo, meta: { auth: false, title: '测试demo', transitionName: `slide` } },
   { name: 'lazyServices', path: '/lazyServices', component: LazyResolvingObservableServices, meta: { auth: false, title: '测试build模式', transitionName: `slide` } },
   { name: 'builddemo', path: '/builddemo', component: UserBuildDemo, meta: { auth: false, title: '测试build模式', transitionName: `slide` } },
   { name: 'hookDemo', path: '/hookDemo', component: HookDemo, meta: { auth: false, title: '测试hook模式', transitionName: `slide` } },
