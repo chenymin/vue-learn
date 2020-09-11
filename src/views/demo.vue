@@ -4,54 +4,90 @@
     </confirm-dialogue>
     <pic-alert :is-touch-close='isTouchClose' ></pic-alert>
     <prompt-alert :is-touch-close='isTouchClose'
-                  :content="'sdfsdfsfsfssdfsdf'"
-                  v-model="promptShow">
+                    :content="'sdfsdfsfsfssdfsdf'"
+                    v-model="promptShow">
     </prompt-alert>
     <button @click="myMethods">显示确认组件</button>
 
     <div class="form-wrap">
-      <my-text-input
-        v-model="email"
-        label="Email"
-        type="email"
-        v-validate="'required|email'"
-        :error="errors.first('Email')"
-      ></my-text-input>
+        <my-text-input
+          v-model="email"
+          label="Email"
+          type="email"
+          v-validate="'required|email'"
+          v-tip.bottom="'fdfdfdf'"
+          :error="errors.first('Email')"
+        ></my-text-input>
 
-      <my-text-input
-        v-model="phone"
-        label="手机号"
-        type="text"
-        v-validate="'required|phone'"
-        :error="errors.first('手机号')"
-      ></my-text-input>
+        <my-text-input
+          v-model="phone"
+          label="手机号"
+          type="text"
+          v-validate="'required|phone'"
+          :error="errors.first('手机号')"
+        ></my-text-input>
 
-      <multiplexing-input v-model="phone1"
-                          :label="filed.label"
-                          v-validate="'required|phone'"
-                          :error="errors.first('手机号码1')">
-      </multiplexing-input>
-      <date-picker v-model="datePickerInfo.value" v-bind="datePickerInfo" v-validate="'required|cardDate'"></date-picker>
-      <dist-picker
-        v-bind="distpicker"
-        v-model="distpicker.detailCode"
-        v-validate="'required'"
-      >
-      </dist-picker>
+        <multiplexing-input v-model="phone1"
+                            :label="filed.label"
+                            v-validate="'required|phone'"
+                            :error="errors.first('手机号码1')">
+        </multiplexing-input>
+        <date-picker v-model="datePickerInfo.value" v-bind="datePickerInfo" v-validate="'required|cardDate'"></date-picker>
+        <dist-picker
+          v-bind="distpicker"
+          v-model="distpicker.detailCode"
+          v-validate="'required'"
+        >
+        </dist-picker>
+
+        <my-text-input
+          v-model="email"
+          label="Email"
+          type="email"
+          v-validate="'required|email'"
+          :error="errors.first('Email')"
+        ></my-text-input>
+
+        <my-text-input
+          v-model="phone"
+          label="手机号"
+          type="text"
+          v-validate="'required|phone'"
+          :error="errors.first('手机号')"
+        ></my-text-input>
+
+        <multiplexing-input v-model="phone1"
+                            :label="filed.label"
+                            v-validate="'required|phone'"
+                            :error="errors.first('手机号码1')">
+        </multiplexing-input>
+        <date-picker v-model="datePickerInfo.value" v-bind="datePickerInfo" v-validate="'required|cardDate'"></date-picker>
+        <dist-picker
+          v-bind="distpicker"
+          v-model="distpicker.detailCode"
+          v-validate="'required'"
+        >
+        </dist-picker>
       <div>
-    <span>Enter serial:</span>
-    <input
-      type="text"
-      placeholder="xxx-xxx-xxx"
-      v-model="formattedSerial"
-      ref="input"
-    />
+        
+      <span>Enter serial:</span>
+      <input
+        type="text"
+        placeholder="xxx-xxx-xxx"
+        v-model="formattedSerial"
+        ref="input"/>
   </div>
-    </div>
+</div>
+    <span v-tip.top.light.click="msg">{{ msg }}</span>
+
+    <button v-tip.right="options">
+      指令使用-绑定一个对象
+    </button>
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import MultiplexingInput from '../components/smsverification.vue'
   import ConfirmDialogue from '../components/confirmdialogue.vue'
   import Selection from '../components/selection.vue'
@@ -89,6 +125,25 @@
     },
     data () {
       return {
+        options: {
+          title: '这里是标题',
+          content: '显示内容',
+          theme: 'dark',
+          //  tip 的容器，在不设置的情况下，tip 会自动在参考元素的父级元素上面查找合适的容器，但推荐手动设置一个 tip 对象容器
+          container: document.body,
+          customProps: { msg: '自定义渲染' },
+          // 这里通过 customComponent 定义了一个自定义组件
+          customComponent: Vue.extend({
+            props: ['msg'],
+            render (h) {
+              return h('span', this.msg)
+            }
+          }),
+          placements: ['top', 'buttom'],
+          duration: 400,
+          transition: true
+        },
+        msg: 'sfsfsfsfa',
         serial: '',
         distpicker: {
           detailCode: '北京市-北京市-东城区',

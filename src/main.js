@@ -21,6 +21,11 @@ import 'wicg-inert'
 import PortalVue from 'portal-vue'
 Vue.use(PortalVue)
 
+// tooltip
+import MyTip from '@/components/toolTip/index'
+import '@/components/toolTip/main.scss'
+Vue.use(MyTip.directive, { directiveName: 'tip' })
+
 // 动态配置
 import dynamicConfig from './dynamic-config'
 import makeCrudModule from './store/modules/crud'
