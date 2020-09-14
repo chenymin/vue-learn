@@ -78,11 +78,11 @@
         ref="input"/>
   </div>
 </div>
-    <span v-tip.top.light.click="msg">{{ msg }}</span>
+    <!-- <span v-tip.top.light.click="msg">{{ msg }}</span>
 
     <button v-tip.right="options">
       指令使用-绑定一个对象
-    </button>
+    </button> -->
   </div>
 </template>
 
