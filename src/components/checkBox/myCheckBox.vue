@@ -106,7 +106,7 @@
       display: none;
     }
     .checkbox-label {
-      display: none;
+      // display: none;
     }
     .check-box + .checkbox-label::before {
       content: '';

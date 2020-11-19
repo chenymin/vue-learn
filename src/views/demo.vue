@@ -47,15 +47,17 @@
           v-validate="'required|email'"
           :error="errors.first('Email')"
         ></my-text-input>
-
+  <mdb-tooltip trigger="hover" :options="{placement: 'bottom'}">
+    <span slot="tip">Tooltip</span>
         <my-text-input
+        slot="reference"
           v-model="phone"
           label="手机号"
           type="text"
           v-validate="'required|phone'"
           :error="errors.first('手机号')"
         ></my-text-input>
-
+</mdb-tooltip>
         <multiplexing-input v-model="phone1"
                             :label="filed.label"
                             v-validate="'required|phone'"
@@ -76,13 +78,12 @@
         placeholder="xxx-xxx-xxx"
         v-model="formattedSerial"
         ref="input"/>
+        <my-check-box v-model="checkVal"><span slot="checkbox-slot">测试</span></my-check-box>
+        <customer-tip text="Tooltip default delay">
+          <button>Delay default</button>
+        </customer-tip>
   </div>
 </div>
-    <!-- <span v-tip.top.light.click="msg">{{ msg }}</span>
-
-    <button v-tip.right="options">
-      指令使用-绑定一个对象
-    </button> -->
   </div>
 </template>
 
@@ -98,6 +99,11 @@
   import PromptAlert from '../components/promptalert'
   import DatePicker from '../components/datepicker/datepicker'
   import DistPicker from '../components/distpickers/distpicker'
+
+  import MdbTooltip from '../components/new-tip/index'
+  import MyTip from '../components/new-tip/myTip.vue'
+
+  import MyCheckBox from '../components/checkBox/myCheckBox.vue'
 
   export default {
     computed: {
@@ -241,7 +247,8 @@
             label: '交通银行',
             value: '05'
           }
-        ]
+        ],
+        checkVal: 0
       }
     },
     methods: {
@@ -259,6 +266,7 @@
       }
     },
     components: {
+      MyCheckBox,
       ConfirmDialogue,
       Selection,
       PicAlert,
@@ -268,7 +276,9 @@
       PromptAlert,
       MultiplexingInput,
       DatePicker,
-      DistPicker
+      DistPicker,
+      MdbTooltip,
+      MyTip
     },
     mounted () {
     },
