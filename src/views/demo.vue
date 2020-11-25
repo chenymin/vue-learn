@@ -82,6 +82,7 @@
         <customer-tip text="Tooltip default delay">
           <button>Delay default</button>
         </customer-tip>
+        <span>{{ price }}</span>
   </div>
 </div>
   </div>
@@ -104,6 +105,8 @@
   import MyTip from '../components/new-tip/myTip.vue'
 
   import MyCheckBox from '../components/checkBox/myCheckBox.vue'
+
+  import Dinero from 'dinero.js'
 
   export default {
     computed: {
@@ -248,7 +251,9 @@
             value: '05'
           }
         ],
-        checkVal: 0
+        checkVal: 0,
+        price: Dinero({ amount: 500000000, currency: 'EUR' }).toFormat('0,0.000')
+
       }
     },
     methods: {
