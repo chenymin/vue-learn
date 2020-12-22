@@ -64,7 +64,7 @@
     "jquery": "^3.2.1",
     "lazy-compile-webpack-plugin": "^0.1.7",
     "lodash-webpack-plugin": "^0.11.5",
-    "node-notifier": "^5.1.2",
+    "node-notifier": "^8.0.1",
     "node-sass": "^4.5.3",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
