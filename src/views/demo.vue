@@ -79,10 +79,13 @@
         v-model="formattedSerial"
         ref="input"/>
         <my-check-box v-model="checkVal"><span slot="checkbox-slot">测试</span></my-check-box>
-        <customer-tip text="Tooltip default delay">
+        <!-- <customer-tip text="Tooltip default delay">
           <button>Delay default</button>
-        </customer-tip>
+        </customer-tip> -->
         <span>{{ price }}</span>
+        <div class="test-outside" v-out-close="hideElement">
+          <p v-if="isHideElement" class="test-outside-child">dfdfdfdfdf</p>
+        </div>
   </div>
 </div>
   </div>
@@ -134,6 +137,7 @@
     },
     data () {
       return {
+        isHideElement: true,
         options: {
           title: '这里是标题',
           content: '显示内容',
@@ -268,6 +272,9 @@
       },
       test () {
         console.log('点击确认')
+      },
+      hideElement () {
+        this.isHideElement = false
       }
     },
     components: {
@@ -294,5 +301,14 @@
 </script>
 
 <style scoped>
+  .test-outside {
+    position: relative;
+    /* height: 100px; */
+  }
+  .test-outside-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 </style>
 

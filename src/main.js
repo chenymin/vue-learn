@@ -11,6 +11,9 @@ import VeeValidate, {Validator} from 'vee-validate'
 import dictionary from '@/utils/validatorConfig'
 import zh from 'vee-validate/dist/locale/zh_CN'
 import serviceContainer from '@/utils/service-container'
+import outsideClose from '@/directives/click-outside'
+
+Vue.directive('out-close', outsideClose)
 
 // 有赞vant组件
 import { DatetimePicker } from 'vant'
