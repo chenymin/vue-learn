@@ -299,3 +299,24 @@ export const compareDate = (dataVal = '') => {
   const dateStamp = new Date(dataVal).getTime()
   return dateStamp >= todayValue.getTime()
 }
+
+// 数组对象根据key去重
+export const unique = (arr, key) => {
+  const map = new Map()
+  const array = []
+  if (!key) {
+    return arr
+  }
+  arr.forEach((item, index) => {
+    const hasKey = `${key}${item[key]}`;
+    if (!Object.keys(item).includes(key)) {
+      array.push(item)
+      return array
+    }
+    if (!map.has(hasKey)) {
+      array.push(item)
+      map.set(hasKey, 1)
+    }
+  })
+  return array
+}
