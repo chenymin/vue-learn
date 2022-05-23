@@ -308,7 +308,7 @@ export const unique = (arr, key) => {
     return arr
   }
   arr.forEach((item, index) => {
-    const hasKey = `${key}${item[key]}`;
+    const hasKey = `${key}${item[key]}`
     if (!Object.keys(item).includes(key)) {
       array.push(item)
       return array
